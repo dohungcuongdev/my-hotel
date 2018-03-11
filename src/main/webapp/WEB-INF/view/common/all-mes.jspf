@@ -1,0 +1,18 @@
+<div class="row" id="all-message">
+	<div class="col-md-12">
+		<section class="panel">
+			<header class="panel-heading"> All Message </header>
+			<div class="box-tools m-b-15">
+				<div class="input-group">
+					<input id="mesInput" type="text" name="table_search" class="form-control input-sm pull-right" style="width: 150px;" placeholder="Search"  onkeyup="searchMessage('mesInput','all-message-box')"/>
+					<div class="input-group-btn">
+						<button class="btn btn-sm btn-default"> <i class="fa fa-search"></i></button>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body" id="all-message-box">
+				<%@ include file="mes-box.jspf"%>		
+			</div>	
+		</section>
+	</div>
+</div>

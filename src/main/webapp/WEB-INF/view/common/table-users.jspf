@@ -1,0 +1,30 @@
+<table id="table-users">
+	<thead>
+    <tr id="tableHeader">
+        <th class="tr-p" onclick="sortNum(0,'table-users')">No.</th>
+        <th class="tr-p" onclick="sortAlpha(1,'table-users')">User</th>
+        <th class="tr-p" onclick="sortDate(2,'table-users')">Register Time</th>
+        <th class="tr-p" onclick="sortAlpha(3,'table-users')">Full Name</th>
+        <th class="tr-p" onclick="sortAlpha(4,'table-users')">Phone</th>
+        <th class="tr-p" onclick="sortAlpha(5,'table-users')">Address</th>
+        <th>View</th>
+        <th>Del</th>
+        <th>Ban</th>
+    </tr>
+    </thead>
+    <tbody>
+    <c:forEach var="user" items="${listusers}" varStatus="loop">
+        <tr>
+            <td>${loop.index + 1}</td>
+            <td>${user.username}</td>
+            <td>${user.getICTDateTime(user.created_at)}</td>
+            <td>${user.name}</td>
+            <td><span class="label label-success">${user.phone}</span></td>
+            <td>${user.address}</td>
+            <td><button onclick="location.href = '${pageContext.request.contextPath}/user/${user.username}.html'" class="btn btn-default btn-xs"><i class="fa fa-check"></i></button></td>
+            <td><button class="btn btn-default btn-xs"><i class="fa fa-times"></i></button></td>
+            <td><button class="btn btn-default btn-xs"><i class="fa fa-ban"></i></button></td>
+        </tr>
+    </c:forEach>
+    </tbody>
+</table>
