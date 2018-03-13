@@ -46,6 +46,22 @@ public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO 
 	}
 	
 	@Override
+	public List<Reservation> getAllReservationsInDate(String date) {
+        List<Reservation> reservations = new ArrayList<>();
+        BasicDBObject orderBy = new BasicDBObject();
+        BasicDBObject whereQuery = new BasicDBObject();
+        String query = "{$regex : '" + date + "'}";
+        whereQuery.put("checkin", BasicDBObject.parse(query));
+        orderBy.put("id", -1);
+        DBCursor cursor = collection.find(whereQuery).sort(orderBy);
+        while (cursor.hasNext()) {
+        	DBObject obj = cursor.next();
+        	reservations.add(fromJson3(obj, Reservation.class));
+        }
+        return reservations;
+	}
+	
+	@Override
 	public List<Reservation> getAllReservationsByGuest(String guest) {
         List<Reservation> reservations = new ArrayList<>();
         BasicDBObject orderBy = new BasicDBObject();

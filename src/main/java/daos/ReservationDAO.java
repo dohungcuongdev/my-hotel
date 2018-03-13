@@ -7,6 +7,8 @@ import model.mongodb.user.tracking.Reservation;
 public interface ReservationDAO {
 	
 	public List<Reservation> getAllReservations();
+	
+	public List<Reservation> getAllReservationsInDate(String date);
 
 	public List<Reservation> getAllReservationsByGuest(String guest);
 

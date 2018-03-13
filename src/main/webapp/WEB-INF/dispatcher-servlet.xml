@@ -52,12 +52,12 @@
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 	
 	<!-- Database Configuration -->
-	<import resource="DataSource.xml" />
+	<!--<import resource="DataSource.xml" /> -->
 	<!-- Hibernate 4 SessionFactory Bean definition -->
-	<import resource="hibernate.cfg.xml" />
+	<!--<import resource="hibernate.cfg.xml" /> -->
 
-	<bean id="transactionManager"
+	<!--<bean id="transactionManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
+	</bean> -->
 </beans>

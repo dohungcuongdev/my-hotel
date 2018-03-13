@@ -45,9 +45,16 @@ public class VNAppController {
 	
 	@Autowired
 	private ReservationService reservationService;
+	
+	// don phong trong ngay 
+	@RequestMapping(value = { "don-phong-trong-ngay", "donphongtrongngay", "index" }, method = RequestMethod.GET)
+	public String donPhongTrongNgay(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		model.put("reservations", reservationService.getAllReservations());
+		return authInitializeRedirect(request, response, model, "quan-ly-dat-phong");
+	}
 
 	// quan li dat phong 
-	@RequestMapping(value = { "quan-ly-dat-phong", "quanlydatphong", "index" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "quan-ly-dat-phong", "quanlydatphong" }, method = RequestMethod.GET)
 	public String quanLyDatPhong(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		model.put("reservations", reservationService.getAllReservations());
 		return authInitializeRedirect(request, response, model, "quan-ly-dat-phong");
