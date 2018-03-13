@@ -1,14 +1,15 @@
 package daos;
 
+import java.util.Date;
 import java.util.List;
 
-import model.mongodb.user.tracking.Reservation;
+import model.myhotel.Reservation;
 
 public interface ReservationDAO {
 	
 	public List<Reservation> getAllReservations();
 	
-	public List<Reservation> getAllReservationsInDate(String date);
+	public List<Reservation> getAllReservationsInDate(Date date);
 
 	public List<Reservation> getAllReservationsByGuest(String guest);
 
@@ -23,5 +24,7 @@ public interface ReservationDAO {
 	public void editReservationInfor(Reservation reservation);
 	
 	public Reservation findAnUpdateReservation(Reservation reservation);
+	
+	public Reservation getReservationRoomsBooked(String room);
 
 }

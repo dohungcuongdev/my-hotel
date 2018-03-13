@@ -1,12 +1,13 @@
 package services.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import daos.ReservationDAO;
-import model.mongodb.user.tracking.Reservation;
+import model.myhotel.Reservation;
 import services.ReservationService;
 
 /**
@@ -60,6 +61,11 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public Reservation findAnUpdateReservation(Reservation reservation) {
 		return reservationDAO.findAnUpdateReservation(reservation);
+	}
+
+	@Override
+	public List<Reservation> getAllReservationsInDate(Date date) {
+		return reservationDAO.getAllReservationsInDate(date);
 	}
 
 }

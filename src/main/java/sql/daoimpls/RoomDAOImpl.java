@@ -115,4 +115,16 @@ public class RoomDAOImpl extends HotelItemDAOImpl<HotelRoom> implements RoomDAO 
 	private List<HotelRoom> getRelatedHotelRoomsNoDB(String type) {
 		return AppData.listrooms.stream().filter((item) -> (item.getType().equals(type))).collect(Collectors.toList());
 	}
+
+	@Override
+	public List<HotelRoom> getAllRoomsBooked() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<HotelRoom> getAllRoomsAvailable() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

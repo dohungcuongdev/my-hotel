@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
@@ -102,4 +103,30 @@ public class RoomDAOImpl extends HotelItemDAOImpl<HotelRoom> implements RoomDAO 
 			updateRoom(room);
 		}
 	}
+	
+    @Override
+    public List<HotelRoom> getAllRoomsBooked() {
+        List<HotelRoom> roomsBooked = new ArrayList<>();
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put("status", "booked");
+        DBCursor cursor = collection.find(whereQuery);
+        while (cursor.hasNext()) {
+        	DBObject obj = cursor.next();
+        	roomsBooked.add(fromJson3(obj, HotelRoom.class));
+        }
+        return roomsBooked;
+    }
+    
+    @Override
+    public List<HotelRoom> getAllRoomsAvailable() {
+        List<HotelRoom> roomsAvailable = new ArrayList<>();
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put("status", "available");
+        DBCursor cursor = collection.find(whereQuery);
+        while (cursor.hasNext()) {
+        	DBObject obj = cursor.next();
+        	roomsAvailable.add(fromJson3(obj, HotelRoom.class));
+        }
+        return roomsAvailable;
+    }
 }

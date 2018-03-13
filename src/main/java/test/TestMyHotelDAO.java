@@ -3,21 +3,38 @@ package test;
 import java.net.UnknownHostException;
 import java.util.List;
 
-import model.mongodb.user.tracking.Reservation;
+import model.myhotel.Reservation;
+import model.sql.hotel.HotelRoom;
 import mongodb.daoimpls.ReservationDAOImpl;
-
-import statics.helper.MathCalculator;
+import mongodb.daoimpls.RoomDAOImpl;
 
 public class TestMyHotelDAO {
-
-	public static void main(String[] args) throws UnknownHostException {
+	
+	public static void testReservation() throws UnknownHostException {
 		ReservationDAOImpl rDAO = new ReservationDAOImpl();
 //		Reservation r = rDAO.getAllReservations().get(0);
 //		r.setGuest("ghghgh");
 //		System.out.println(rDAO.findAnUpdateReservation(r));
 		
-		List<Reservation> rs = rDAO.getAllReservationsInDate("2018-03-12");
+//		List<Reservation> rs = rDAO.getAllReservationsInDate(new Date());
+//		System.out.println(rs);
+		
+//		List<Reservation> rs = rDAO.getAllReservations();
+//		System.out.println(rs);
+		
+		Reservation r = rDAO.getReservationRoomsBooked("101");
+		System.out.println(r);
+	}
+	
+	public static void testRoom() throws UnknownHostException {
+		RoomDAOImpl rDAO = new RoomDAOImpl();
+		List<HotelRoom> rs = rDAO.getAllRoomsAvailable();
 		System.out.println(rs);
+	}
+
+	public static void main(String[] args) throws UnknownHostException {
+		testReservation();
+
 		
 
 	}

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBObject;
@@ -14,8 +15,11 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
 import daos.ReservationDAO;
+import daos.RoomDAO;
 import model.mongodb.user.tracking.Activity;
-import model.mongodb.user.tracking.Reservation;
+import model.myhotel.Reservation;
+import model.sql.hotel.HotelRoom;
+import statics.helper.DateTimeCalculator;
 import statics.helper.MathCalculator;
 
 /**
@@ -25,6 +29,9 @@ import statics.helper.MathCalculator;
 
 @Repository
 public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO {
+	
+	@Autowired
+	private RoomDAO roomDAO;	
 	
 	private DBCollection collection; 
 	
@@ -36,7 +43,7 @@ public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO 
 	public List<Reservation> getAllReservations() {
         List<Reservation> reservations = new ArrayList<>();
         BasicDBObject orderBy = new BasicDBObject();
-        orderBy.put("id", -1);
+        orderBy.put("checkin", -1);
         DBCursor cursor = collection.find().sort(orderBy);
         while (cursor.hasNext()) {
         	DBObject obj = cursor.next();
@@ -46,13 +53,13 @@ public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO 
 	}
 	
 	@Override
-	public List<Reservation> getAllReservationsInDate(String date) {
+	public List<Reservation> getAllReservationsInDate(Date date) {
         List<Reservation> reservations = new ArrayList<>();
         BasicDBObject orderBy = new BasicDBObject();
         BasicDBObject whereQuery = new BasicDBObject();
-        String query = "{$regex : '" + date + "'}";
+        String query = "{$regex : '" + DateTimeCalculator.getStrDate(date) + "'}";
         whereQuery.put("checkin", BasicDBObject.parse(query));
-        orderBy.put("id", -1);
+        orderBy.put("checkin", -1);
         DBCursor cursor = collection.find(whereQuery).sort(orderBy);
         while (cursor.hasNext()) {
         	DBObject obj = cursor.next();
@@ -67,7 +74,7 @@ public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO 
         BasicDBObject orderBy = new BasicDBObject();
         BasicDBObject whereQuery = new BasicDBObject();
         whereQuery.put("guest", guest);
-        orderBy.put("id", -1);
+        orderBy.put("checkin", -1);
         DBCursor cursor = collection.find(whereQuery).sort(orderBy);
         while (cursor.hasNext()) {
         	DBObject obj = cursor.next();
@@ -91,7 +98,7 @@ public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO 
     		reservation.setCheckin(new Date().toString());
     	}
 		BasicDBObject sortQuery = new BasicDBObject();
-		sortQuery.put("id", -1);
+		sortQuery.put("checkin", -1);
 		DBCursor cursor = collection.find().sort(sortQuery).limit(1);
 		int id = cursor.hasNext() ?  Integer.parseInt(cursor.next().get("id").toString()) + 1: 1;
 		reservation.setId(id);
@@ -105,7 +112,7 @@ public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO 
     		reservation.setCheckin(new Date().toString());
     	}
 		BasicDBObject sortQuery = new BasicDBObject();
-		sortQuery.put("id", -1);
+		sortQuery.put("checkin", -1);
 		DBCursor cursor = collection.find().sort(sortQuery).limit(1);
 		int id = cursor.hasNext() ?  Integer.parseInt(cursor.next().get("id").toString()) + 1: 1;
 		reservation.setId(id);
@@ -143,4 +150,15 @@ public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO 
         collection.update(searchObject, document);
         return reservation;
 	}
+    
+    @Override
+    public Reservation getReservationRoomsBooked(String room) {
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put("room", room);
+        BasicDBObject sortQuery = new BasicDBObject();
+		sortQuery.put("checkin", -1);
+		DBCursor cursor = collection.find(whereQuery).sort(sortQuery).limit(1);
+		DBObject obj = cursor.next();
+        return fromJson3(obj, Reservation.class);
+    }
 }

@@ -65,4 +65,31 @@ public class DateTimeCalculator {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss");
 		return format.format(date).replaceFirst(" ", "T") + "Z";
 	}
+	
+	public static String getStrToday() {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		return formatter.format(new Date());
+	}
+	
+	public static String getStrDate(Date date) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		return formatter.format(date);
+	}
+	
+	public static Date getPreviousDate(Date date, int n) {
+		return new Date(date.getTime() - n * 24 * 3600 * 1000 ); //Subtract n days 
+	}
+	
+	public static Date getYesterday() {
+		return getPreviousDate(new Date(), 1);
+	}
+	
+	public static String  getYesterdayStrDateVN() {
+		return getStrDateVN(getYesterday());
+	}
+	
+	public static String getStrDateVN(Date date) {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+		return formatter.format(date);
+	}
 }

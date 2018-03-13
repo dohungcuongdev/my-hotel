@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import model.mongodb.user.Customer;
 import model.mongodb.user.tracking.Activity;
-import model.mongodb.user.tracking.Reservation;
+import model.myhotel.Reservation;
 import model.sql.hotel.HotelRoom;
 import model.sql.hotel.HotelService;
 import services.ApplicationService;
@@ -24,6 +25,7 @@ import services.HotelItemService;
 import services.ReservationService;
 import services.UserService;
 import statics.constant.AppData;
+import statics.helper.DateTimeCalculator;
 
 /**
  *
@@ -49,15 +51,26 @@ public class VNAppController {
 	// don phong trong ngay 
 	@RequestMapping(value = { "don-phong-trong-ngay", "donphongtrongngay", "index" }, method = RequestMethod.GET)
 	public String donPhongTrongNgay(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		model.put("reservations", reservationService.getAllReservations());
-		return authInitializeRedirect(request, response, model, "quan-ly-dat-phong");
+		Date today = new Date();
+		model.put("today", DateTimeCalculator.getStrDateVN(today));
+		model.put("reservations", reservationService.getAllReservationsInDate(today));
+		return authInitializeRedirect(request, response, model, "don-phong-trong-ngay");
+	}
+	
+	// don phong hom qua 
+	@RequestMapping(value = { "don-phong-hom-qua", "donphonghomqua" }, method = RequestMethod.GET)
+	public String donPhongHomQua(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		Date today = DateTimeCalculator.getYesterday();
+		model.put("today", DateTimeCalculator.getStrDateVN(today));
+		model.put("reservations", reservationService.getAllReservationsInDate(today));
+		return authInitializeRedirect(request, response, model, "don-phong-trong-ngay");
 	}
 
-	// quan li dat phong 
-	@RequestMapping(value = { "quan-ly-dat-phong", "quanlydatphong" }, method = RequestMethod.GET)
+	// lich su dat phong
+	@RequestMapping(value = { "lich-su-dat-phong", "lichsudatphong" }, method = RequestMethod.GET)
 	public String quanLyDatPhong(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		model.put("reservations", reservationService.getAllReservations());
-		return authInitializeRedirect(request, response, model, "quan-ly-dat-phong");
+		return authInitializeRedirect(request, response, model, "lich-su-dat-phong");
 	}
 	
 	// them lich dat phong
@@ -79,6 +92,24 @@ public class VNAppController {
 	public String traPhong(@PathVariable(value = "id") int id, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		model.addAttribute("newReservation", reservationService.getReservationByID(id));
 		return authInitializeRedirect(request, response, model, "tra-phong");
+	}
+	
+	// danh sach phong
+	@RequestMapping(value = { "danh-sach-phong", "danhsachphong" }, method = RequestMethod.GET)
+	public String danhsachphong(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		return authInitializeRedirect(request, response, model, "danh-sach-phong");
+	}
+	
+	// phong dang o
+	@RequestMapping(value = { "phong-dang-o", "phongdango" }, method = RequestMethod.GET)
+	public String phongDangO(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		return authInitializeRedirect(request, response, model, "phong-dang-o");
+	}
+	
+	// phong con
+	@RequestMapping(value = { "phong-con", "phongcon" }, method = RequestMethod.GET)
+	public String phongCon(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		return authInitializeRedirect(request, response, model, "phong-con");
 	}
 	
 	// xử lý thêm lịch đặt phòng

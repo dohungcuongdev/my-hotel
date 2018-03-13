@@ -1,8 +1,9 @@
 package services;
 
+import java.util.Date;
 import java.util.List;
 
-import model.mongodb.user.tracking.Reservation;
+import model.myhotel.Reservation;
 
 /**
  *
@@ -12,6 +13,8 @@ public interface ReservationService {
 	public List<Reservation> getAllReservations();
 
 	public List<Reservation> getAllReservationsByGuest(String guest);
+	
+	public List<Reservation> getAllReservationsInDate(Date date);
 
 	public Reservation getReservationByID(int id);
 

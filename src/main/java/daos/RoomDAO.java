@@ -27,4 +27,6 @@ public interface RoomDAO {
 	public void deleteItem(int id);
 	public void bookRoom(HotelRoom room);
 	public void feedbackRoom(HotelRoom room);
+	public List<HotelRoom> getAllRoomsBooked();
+	public List<HotelRoom> getAllRoomsAvailable();
 }

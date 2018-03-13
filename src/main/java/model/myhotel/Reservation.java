@@ -1,4 +1,4 @@
-package model.mongodb.user.tracking;
+package model.myhotel;
 
 import java.util.Comparator;
 import java.util.List;
@@ -141,7 +141,7 @@ public class Reservation {
 		case "102":
 			return "label label-primary";
 		}
-		return "label";
+		return "label label-primary";
 	}
 
 	public boolean hasNoValue(Object o) {

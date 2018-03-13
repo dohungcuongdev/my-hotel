@@ -1,9 +1,10 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="row" style="margin-bottom:5px;">
     <div class="col-md-3 tr-p" onclick="location.href = '${pageContext.request.contextPath}/manage-users.html'">
         <div class="sm-st clearfix">
             <span class="sm-st-icon st-red"><i class="fa fa-user"></i></span>
             <div class="sm-st-info">
-                <span>${totalUsers}</span> Total User
+                <span>${totalUsers}</span> Đơn phòng hôm nay
             </div>
         </div>
     </div>
@@ -11,7 +12,7 @@
         <div class="sm-st clearfix">
             <span class="sm-st-icon st-violet"><i class="fa fa-envelope-o"></i></span>
             <div class="sm-st-info">
-                <span>${totalMessage}</span> Total Messages
+                <span>${totalMessage}</span> Số phòng còn
             </div>
         </div>
     </div>
@@ -19,7 +20,7 @@
         <div class="sm-st clearfix">
             <span class="sm-st-icon st-blue"><i class="fa fa-building-o"></i></span>
             <div class="sm-st-info">
-                <span>${totalRooms}</span> Total Rooms
+                <span>${totalRooms}</span> Số phòng đang ở
             </div>
         </div>
     </div>
@@ -27,7 +28,7 @@
         <div class="sm-st clearfix">
             <span class="sm-st-icon st-green"><i class="fa fa-food"></i></span>
             <div class="sm-st-info">
-                <span>${totalServices}</span> Total Services
+                <span>${totalServices}</span> Dịch vụ
             </div>
         </div>
     </div>
