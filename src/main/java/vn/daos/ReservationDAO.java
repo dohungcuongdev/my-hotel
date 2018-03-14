@@ -1,20 +1,18 @@
-package services;
+package vn.daos;
 
 import java.util.Date;
 import java.util.List;
 
-import model.myhotel.Reservation;
+import vn.model.Income;
+import vn.model.Reservation;
 
-/**
- *
- * @author HUNGCUONG
- */
-public interface ReservationService {
+public interface ReservationDAO {
+	
 	public List<Reservation> getAllReservations();
-
-	public List<Reservation> getAllReservationsByGuest(String guest);
 	
 	public List<Reservation> getAllReservationsInDate(Date date);
+
+	public List<Reservation> getAllReservationsByGuest(String guest);
 
 	public Reservation getReservationByID(int id);
 
@@ -27,4 +25,11 @@ public interface ReservationService {
 	public void editReservationInfor(Reservation reservation);
 	
 	public Reservation findAnUpdateReservation(Reservation reservation);
+	
+	public Reservation getReservationRoomsBooked(String room);
+		
+	public List<Reservation> getRoomsBookedToday();
+	
+    public Income getIncomeFromTo(String from, String to);
+
 }

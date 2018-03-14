@@ -92,4 +92,14 @@ public class DateTimeCalculator {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		return formatter.format(date);
 	}
+	
+	public static String getStrDateTimeVN(Date date) {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		return formatter.format(date);
+	}
+	
+	public static String getStrDateTimeVNToday() {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		return formatter.format(new Date());
+	}
 }

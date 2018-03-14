@@ -1,12 +1,9 @@
-package test;
+package vn.test;
 
 import java.net.UnknownHostException;
 import java.util.List;
-
-import model.myhotel.Reservation;
-import model.sql.hotel.HotelRoom;
-import mongodb.daoimpls.ReservationDAOImpl;
-import mongodb.daoimpls.RoomDAOImpl;
+import vn.daos.impl.ReservationDAOImpl;
+import vn.model.Reservation;
 
 public class TestMyHotelDAO {
 	
@@ -21,19 +18,10 @@ public class TestMyHotelDAO {
 		
 //		List<Reservation> rs = rDAO.getAllReservations();
 //		System.out.println(rs);
-		
-		Reservation r = rDAO.getReservationRoomsBooked("101");
-		System.out.println(r);
-	}
-	
-	public static void testRoom() throws UnknownHostException {
-		RoomDAOImpl rDAO = new RoomDAOImpl();
-		List<HotelRoom> rs = rDAO.getAllRoomsAvailable();
-		System.out.println(rs);
 	}
 
 	public static void main(String[] args) throws UnknownHostException {
-		testReservation();
+		//System.out.println(new Room(1,"101", "VIP").toBookedRoomString());
 
 		
 

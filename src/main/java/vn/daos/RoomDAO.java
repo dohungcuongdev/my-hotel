@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package daos;
+package vn.daos;
 
 import java.util.List;
 
-import model.sql.hotel.HotelRoom;
+import vn.model.HotelRoom;
 
 /**
  *
@@ -25,6 +25,8 @@ public interface RoomDAO {
     public String findAndAddNewRoom(HotelRoom newRoom);
 	public void editImage(String name, String img, String img2);
 	public void deleteItem(int id);
-	public void bookRoom(HotelRoom room);
-	public void feedbackRoom(HotelRoom room);
+	public void checkOutRoom(String name);
+	public List<HotelRoom> getAllRoomsCheckin();
+	public List<HotelRoom> getAllRoomsAvailable();
+	public String getTypeByRoom(String roomName);
 }

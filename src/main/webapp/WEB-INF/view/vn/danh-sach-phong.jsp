@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ include file="vn/common/sub-content.jspf"%>
+<%@ include file="common/sub-content.jspf"%>
 <div class="row">
     <div class="col-xs-12">
         <div class="panel">
@@ -20,12 +20,11 @@
 				         <th class="tr-p" onclick="sortNum(0,'table-rooms')">STT</th>
 				         <th class="tr-p" onclick="sortAlpha(1,'table-rooms')">Phòng</th>
 				         <th class="tr-p" onclick="sortAlpha(2,'table-rooms')">Thể loại</th>
-				         <th class="tr-p" onclick="sortNum(3,'table-rooms')">Khách đang ở</th>
-				         <th class="tr-p" onclick="sortNum(4,'table-rooms')">Giấy Tờ</th>
-				         <th class="tr-p" onclick="sortAlpha(5,'table-rooms')">Giờ vào</th>
+				         <th class="tr-p" onclick="sortNum(3,'table-rooms')">Diện tích</th>
+				         <th class="tr-p" onclick="sortNum(4,'table-rooms')">Giá Phòng</th>
+				         <th class="tr-p" onclick="sortAlpha(5,'table-rooms')">Trạng thái</th>
 				         <th class="tr-p" onclick="sortNum(6,'table-rooms')">Số người</th>
-				         <th class="tr-p" onclick="sortNum(7,'table-rooms')">Đơn phòng</th>
-				         <th>Trả</th>
+				         <th>View</th>
 				         <th>Edit</th>
 				         <th>Del</th>
 				     </tr>
@@ -35,23 +34,11 @@
 				         <tr>
 				             <td>${loop.index + 1}</td>
 				             <td>${room.name}</td>
-				             <c:if test="${room.type.equalsIgnoreCase('deluxe')}">  
-				                 <td><span style="font-size: 14px" class="label label-danger">${room.type}</span></td>
-				                 </c:if>   
-				                 <c:if test="${room.type.equalsIgnoreCase('family')}">  
-				                 <td><span style="font-size: 14px" class="label label-success">${room.type}</span></td>
-				                 </c:if> 
-				                 <c:if test="${room.type.equalsIgnoreCase('couple')}">  
-				                 <td><span style="font-size: 14px" class="label label-primary">${room.type}</span></td>
-				                 </c:if>
-				                 <c:if test="${room.type.equalsIgnoreCase('single')}">  
-				                 <td><span style="font-size: 14px" class="label label-warning">${room.type}</span></td>
-				                 </c:if>  
+				             <td><span style="font-size: 14px" class="${room.getAutoGenColorClassRoom()}">${room.type}</span></td>
 				             <td>${room.size}</td>
 				             <td>${room.price}</td>
 				             <td>${room.status}</td>
-				             <td align="center">${room.numpeople}</td>
-				             <td>${room.avgAminities}</td>
+				             <td>${room.numpeople}</td>
 				             <td><button onclick="location.href = '${pageContext.request.contextPath}/room/${room.name}.html'" class="btn btn-default btn-xs"><i class="fa fa-check"></i></button></td>
 				             <td><button onclick="location.href = '${pageContext.request.contextPath}/edit-room/${room.name}.html'" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i></button></td>
 				             <td><button onclick="deleteRoom('${pageContext.request.contextPath}/remove-room/${room.id}.html')" class="btn btn-default btn-xs"><i class="fa fa-times"></i></button></td>
@@ -61,12 +48,12 @@
 				 </table>
             </div>
             <div class="panel-body">
-                 <center><button type="button" onclick="location.href='${pageContext.request.contextPath}/add-room.html'" class="btn btn-success">Add New Room <i class="fa fa-bed"></i></button></center>
+                 <center><button type="button" onclick="location.href='${pageContext.request.contextPath}/vn/them-phong.html'" class="btn btn-success">Add New Room <i class="fa fa-bed"></i></button></center>
             </div>
         </div>
     </div>
 </div>
-<%@ include file="vn/common/footer.jspf"%>
+<%@ include file="common/footer.jspf"%>
 <script>
     window.onload = function () { //first load page
     	

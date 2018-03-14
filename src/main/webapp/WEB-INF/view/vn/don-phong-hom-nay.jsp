@@ -1,10 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ include file="vn/common/sub-content.jspf"%>
+<%@ include file="common/sub-content.jspf"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="row">
     <div class="col-xs-12">
         <div class="panel">
-            <header class="panel-heading">Đơn đặt phòng ngày ${today }</header>
+            <header class="panel-heading">Đơn đặt phòng hôm này - ngày ${today }</header>
             <div class="box-tools m-b-15">
                 <div class="input-group">
                     <input type="text" name="table_search" class="form-control input-sm pull-right"  style="width: 150px;" id="input-room" onkeyup="searchInputTable('input-room', 'table-rooms')"  placeholder="Search for rooms.." title="Type in a room"/>
@@ -33,7 +33,7 @@
 				     </tr>
 				     </thead>
 				     <tbody>
-				     <c:forEach var="reservation" items="${reservations}" varStatus="loop">
+				     <c:forEach var="reservation" items="${listReservationToday}" varStatus="loop">
 				         <tr>
 				             <td>${loop.index + 1}</td>
 				             <td>${reservation.guest}</td>
@@ -54,12 +54,12 @@
 				 </table>
             </div>
             <div class="panel-body">
-                 <center><button type="button" onclick="location.href='${pageContext.request.contextPath}/vn/them-lich-dat-phong.html'" class="btn btn-success"> Thêm lịch đặt phòng <i class="fa fa-bed"></i></button></center>
+                 <center><button type="button" onclick="location.href='${pageContext.request.contextPath}/them-lich-dat-phong.html'" class="btn btn-success"> Thêm lịch đặt phòng <i class="fa fa-bed"></i></button></center>
             </div>
         </div>
     </div>
 </div>
-<%@ include file="vn/common/footer.jspf"%>
+<%@ include file="common/footer.jspf"%>
 <script>
     window.onload = function () { //first load page
     };

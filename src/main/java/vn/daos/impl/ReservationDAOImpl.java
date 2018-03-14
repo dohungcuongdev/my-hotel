@@ -1,11 +1,10 @@
-package mongodb.daoimpls;
+package vn.daos.impl;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,13 +13,13 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
-import daos.ReservationDAO;
 import daos.RoomDAO;
-import model.mongodb.user.tracking.Activity;
-import model.myhotel.Reservation;
-import model.sql.hotel.HotelRoom;
+import mongodb.daoimpls.JsonParserDAO;
+import mongodb.daoimpls.MongoDbConnector;
 import statics.helper.DateTimeCalculator;
-import statics.helper.MathCalculator;
+import vn.daos.ReservationDAO;
+import vn.model.Income;
+import vn.model.Reservation;
 
 /**
 *
@@ -29,9 +28,6 @@ import statics.helper.MathCalculator;
 
 @Repository
 public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO {
-	
-	@Autowired
-	private RoomDAO roomDAO;	
 	
 	private DBCollection collection; 
 	
@@ -111,6 +107,7 @@ public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO 
     	if(reservation.hasNoValue(reservation.getCheckin())) {
     		reservation.setCheckin(new Date().toString());
     	}
+    	reservation.setStatus("Khách đang ở");
 		BasicDBObject sortQuery = new BasicDBObject();
 		sortQuery.put("checkin", -1);
 		DBCursor cursor = collection.find().sort(sortQuery).limit(1);
@@ -131,6 +128,7 @@ public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO 
     	if(reservation.hasNoValue(reservation.getTotalPayment())) {
     		
     	}
+    	reservation.setStatus("Đã thanh toán");
     	editReservationInfor(reservation);
     }
     
@@ -160,5 +158,38 @@ public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO 
 		DBCursor cursor = collection.find(whereQuery).sort(sortQuery).limit(1);
 		DBObject obj = cursor.next();
         return fromJson3(obj, Reservation.class);
+    }
+    
+    @Override
+    public List<Reservation> getRoomsBookedToday() {
+        List<Reservation> roomsBookedToday = new ArrayList<>();
+        BasicDBObject orderBy = new BasicDBObject();
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put("status", "Khách đang ở");
+        orderBy.put("checkin", -1);
+        DBCursor cursor = collection.find(whereQuery).sort(orderBy);
+        while (cursor.hasNext()) {
+        	DBObject obj = cursor.next();
+        	Reservation reservationRoomToday = fromJson3(obj, Reservation.class);
+        	roomsBookedToday.add(reservationRoomToday);
+        }
+        return roomsBookedToday;
+    }
+    
+    //db.getCollection('my-hotel-reservation').find({ checkin : { $gte : "2018-03-11T06:00", $lte : "2018-03-14T23:20"}})
+    @Override
+    public Income getIncomeFromTo(String from, String to) {
+        List<Reservation> roomsBookedToday = new ArrayList<>();
+        BasicDBObject orderBy = new BasicDBObject();
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put("status", "Khách đang ở");
+        orderBy.put("checkin", -1);
+        DBCursor cursor = collection.find(whereQuery).sort(orderBy);
+        while (cursor.hasNext()) {
+        	DBObject obj = cursor.next();
+        	Reservation reservationRoomToday = fromJson3(obj, Reservation.class);
+        	roomsBookedToday.add(reservationRoomToday);
+        }
+        return null;
     }
 }

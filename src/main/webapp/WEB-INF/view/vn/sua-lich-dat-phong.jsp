@@ -1,11 +1,11 @@
-<%@ include file="vn/common/sub-content.jspf"%>
+<%@ include file="common/sub-content.jspf"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="row">
     <div class="col-lg-12">
         <section class="panel">
-            <header class="panel-heading" style="font-weight: bold; color:red">Điền thông tin khách thuê phòng</header>
+            <header class="panel-heading" style="font-weight: bold; color:red">Lịch đặt phòng</header>
             <div class="panel-body">
-                <form:form method="post" onsubmit="return checkReservationForm()" commandName="newReservation" action="${pageContext.request.contextPath}/vn/dat-phong.html">
+                <form:form method="post" onsubmit="return checkReservationForm()" commandName="reservation" action="${pageContext.request.contextPath}/sua.html">
                     <div class="form-group">
                         <label>Tên Khách Hàng</label>
                     </div>
@@ -17,8 +17,8 @@
                     </div>
                     <div class="form-group">
                         <form:select class="form-control m-b-10" path="rental" id="rental">
-                            <form:option value="hour">Thuê tiếng</form:option>
-                            <form:option value="night">Qua đêm</form:option>
+                            <form:option value="Thuê tiếng">Thuê tiếng</form:option>
+                            <form:option value="Qua đêm">Qua đêm</form:option>
                         </form:select>
                     </div>
                     <div class="form-group">
@@ -68,13 +68,13 @@
                     </div>
                     <p class="help-block">Điền thông tin để tiếp tục quá trình</p>
                     <button style="margin-top: 3.5px" type="submit" class="btn btn-info">Submit</button>
-                    <button style="margin-top: 3.5px" onclick="location.href = '${pageContext.request.contextPath}/vn/them-lich-dat-phong.html'" type="reset" class="btn btn-danger">Cancel</button>
+                    <button style="margin-top: 3.5px" onclick="location.href = '${pageContext.request.contextPath}/sua-lich-dat-phong/${reservation.id}.html'" type="reset" class="btn btn-danger">Cancel</button>
                 </form:form>
             </div>
         </section>
     </div>
 </div>
-<%@ include file="vn/common/footer.jspf"%>
+<%@ include file="common/footer.jspf"%>
 <script type="text/javascript">
 function checkReservationForm() {
 /* 	$('#guest').css("border", "2px solid red");
@@ -82,7 +82,6 @@ function checkReservationForm() {
 }
 
 window.onload = function () { //first load page
-	var isoStr = new Date().toISOString();
-	$('#checkin').val(isoStr.substring(0,isoStr.length-8));
+	$("#rental").val('${reservation.rental}');
 };
 </script>

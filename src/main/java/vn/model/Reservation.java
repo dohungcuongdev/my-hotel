@@ -1,10 +1,14 @@
-package model.myhotel;
+package vn.model;
 
 import java.util.Comparator;
-import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBObject;
+
+import vn.daos.impl.RoomDAOImpl;
+import vn.daos.RoomDAO;
 
 public class Reservation {
 	private int id;
@@ -21,6 +25,13 @@ public class Reservation {
 	private String totalStayDuration; // tổng thời gian ở trong phòng
 	private int additionPayment; // phụ thu
 	private int totalPayment; // tổng tiền phải trả
+	private String status; // đã thanh toán chưa? phòng còn khách đang ở?
+	private String created_by; // người khai đơn
+	private String created_at;      // được khai lúc
+	private String last_modify_by;  // lần cuối cùng sửa bởi
+	private String last_modify_at;  // lần cuối cùng sửa lúc
+	
+	private RoomDAO roomDAO = new RoomDAOImpl();
 
 	public int getId() {
 		return id;
@@ -72,6 +83,10 @@ public class Reservation {
 
 	public String getCheckin() {
 		return checkin;
+	}
+	
+	public String getCheckinTime() {
+		return checkin.substring(10);
 	}
 
 	public void setCheckin(String checkin) {
@@ -134,11 +149,51 @@ public class Reservation {
 		this.additionPayment = additionPayment;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getCreated_by() {
+		return created_by;
+	}
+
+	public void setCreated_by(String created_by) {
+		this.created_by = created_by;
+	}
+
+	public String getCreated_at() {
+		return created_at;
+	}
+
+	public void setCreated_at(String created_at) {
+		this.created_at = created_at;
+	}
+
+	public String getLast_modify_by() {
+		return last_modify_by;
+	}
+
+	public void setLast_modify_by(String last_modify_by) {
+		this.last_modify_by = last_modify_by;
+	}
+
+	public String getLast_modify_at() {
+		return last_modify_at;
+	}
+
+	public void setLast_modify_at(String last_modify_at) {
+		this.last_modify_at = last_modify_at;
+	}
+
 	public String getAutoGenColorClassRoom() {
-		switch (room) {
-		case "101":
+		switch (roomDAO.getTypeByRoom(room)) {
+		case "VIP":
 			return "label label-danger";
-		case "102":
+		case "Thường":
 			return "label label-primary";
 		}
 		return "label label-primary";
@@ -158,7 +213,7 @@ public class Reservation {
 	
 	//use for old DAOs: mongodb DAOs
 	public DBObject toDBObject() {
-		return BasicDBObjectBuilder.start("id", id).append("guest", guest).append("cMND", cMND).append("note", note).append("service", service).append("room", room).append("checkin", checkin).append("checkout", checkout).append("totalStayDuration", totalStayDuration).append("totalPayment", totalPayment).get();
+		return BasicDBObjectBuilder.start("id", id).append("guest", guest).append("cMND", cMND).append("rental", rental).append("note", note).append("service", service).append("room", room).append("checkin", checkin).append("checkout", checkout).append("totalStayDuration", totalStayDuration).append("totalPayment", totalPayment).append("status", status).get();
 	}
 
 	@Override

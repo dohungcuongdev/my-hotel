@@ -1,4 +1,4 @@
-package services.impl;
+package vn.service.impl;
 
 import java.util.Date;
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import daos.ReservationDAO;
-import model.myhotel.Reservation;
-import services.ReservationService;
+import vn.daos.ReservationDAO;
+import vn.model.Reservation;
+import vn.service.ReservationService;
 
 /**
  *
@@ -50,7 +50,6 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public void editReservationInfor(Reservation reservation) {
 		reservationDAO.editReservationInfor(reservation);
-		
 	}
 
 	@Override
@@ -66,6 +65,11 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public List<Reservation> getAllReservationsInDate(Date date) {
 		return reservationDAO.getAllReservationsInDate(date);
+	}
+
+	@Override
+	public List<Reservation> getRoomsBookedToday() {
+		return reservationDAO.getRoomsBookedToday();
 	}
 
 }

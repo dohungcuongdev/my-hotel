@@ -1,6 +1,6 @@
-package controller;
+package vn.controller;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,17 +15,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import model.mongodb.user.Customer;
-import model.mongodb.user.tracking.Activity;
-import model.myhotel.Reservation;
-import model.sql.hotel.HotelRoom;
 import model.sql.hotel.HotelService;
-import services.ApplicationService;
-import services.HotelItemService;
-import services.ReservationService;
-import services.UserService;
 import statics.constant.AppData;
 import statics.helper.DateTimeCalculator;
+import vn.model.Reservation;
+import vn.service.HotelItemService;
+import vn.service.ReservationService;
+import vn.model.HotelRoom;
+import vn.model.MyHotelConst;
 
 /**
  *
@@ -35,34 +32,25 @@ import statics.helper.DateTimeCalculator;
 @Controller
 @RequestMapping(value = "/vn")
 public class VNAppController {
-
-	@Autowired
-	private UserService userService;
-
-	@Autowired
-	private HotelItemService hotelItemService;
-
-	@Autowired
-	private ApplicationService appService;
 	
 	@Autowired
 	private ReservationService reservationService;
 	
+	@Autowired
+	private HotelItemService hotelItemService;
+	
 	// don phong trong ngay 
-	@RequestMapping(value = { "don-phong-trong-ngay", "donphongtrongngay", "index" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "don-phong-hom-nay", "donphonghomnay", "index" }, method = RequestMethod.GET)
 	public String donPhongTrongNgay(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		Date today = new Date();
-		model.put("today", DateTimeCalculator.getStrDateVN(today));
-		model.put("reservations", reservationService.getAllReservationsInDate(today));
-		return authInitializeRedirect(request, response, model, "don-phong-trong-ngay");
+		return authInitializeRedirect(request, response, model, "don-phong-hom-nay");
 	}
 	
 	// don phong hom qua 
 	@RequestMapping(value = { "don-phong-hom-qua", "donphonghomqua" }, method = RequestMethod.GET)
 	public String donPhongHomQua(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		Date today = DateTimeCalculator.getYesterday();
-		model.put("today", DateTimeCalculator.getStrDateVN(today));
-		model.put("reservations", reservationService.getAllReservationsInDate(today));
+		Date yesterday = DateTimeCalculator.getYesterday();
+		model.put("yesterday", DateTimeCalculator.getStrDateVN(yesterday));
+		model.put("reservations", reservationService.getAllReservationsInDate(yesterday));
 		return authInitializeRedirect(request, response, model, "don-phong-trong-ngay");
 	}
 
@@ -97,18 +85,21 @@ public class VNAppController {
 	// danh sach phong
 	@RequestMapping(value = { "danh-sach-phong", "danhsachphong" }, method = RequestMethod.GET)
 	public String danhsachphong(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		model.put("listrooms", hotelItemService.getAllRooms());
 		return authInitializeRedirect(request, response, model, "danh-sach-phong");
 	}
 	
 	// phong dang o
 	@RequestMapping(value = { "phong-dang-o", "phongdango" }, method = RequestMethod.GET)
 	public String phongDangO(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		model.put("roomsBooked", reservationService.getRoomsBookedToday());
 		return authInitializeRedirect(request, response, model, "phong-dang-o");
 	}
 	
 	// phong con
 	@RequestMapping(value = { "phong-con", "phongcon" }, method = RequestMethod.GET)
 	public String phongCon(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		model.put("listrooms", hotelItemService.getAllRoomsAvailable());
 		return authInitializeRedirect(request, response, model, "phong-con");
 	}
 	
@@ -129,9 +120,41 @@ public class VNAppController {
 		return "sua-lich-dat-phong";
 	}
 	
+	//them phong
+	@RequestMapping(value = "them-phong", method = RequestMethod.GET)
+	public String addRoom(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		model.addAttribute("newRoom", new HotelRoom());
+		return authInitializeRedirect(request, response, model, "them-phong");
+	}
 	
 	
+	// xử lí thêm phòng
+	@RequestMapping(value = "xu-ly-them-phong", method = RequestMethod.POST)
+	public String roomAdded(@ModelAttribute(value = "newRoom") HotelRoom newRoom, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		initialize(model);
+		model.addAttribute("roomEdit", new HotelRoom());
+		model.put("room", newRoom);
+//		model.put("relatedRoom", hotelItemService.getRelatedHotelRooms(newRoom.getType()));
+//		newRoomName = hotelItemService.findAndAddNewRoom(newRoom);
+		hotelItemService.findAndAddNewRoom(newRoom);
+		model.put("listrooms", hotelItemService.getAllRooms());
+		return authInitializeRedirect(request, response, model, "danh-sach-phong");
+			
+	}
 	
+	// thu nhap hom nay
+	@RequestMapping(value = { "thu-nhap-theo-ngay", "thunhaptheongay" }, method = RequestMethod.GET)
+	public String thuNhapHomNay(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		
+		return authInitializeRedirect(request, response, model, "thu-nhap-theo-ngay");
+	}
+	
+	// thu nhap theo ngay
+	@RequestMapping(value = { "thu-nhap-theo-ngay/{date}", "thunhaptheongay/{date}" }, method = RequestMethod.GET)
+	public String thuNhapTheoNgay(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		
+		return authInitializeRedirect(request, response, model, "thu-nhap-theo-ngay");
+	}
 	
 	
 	
@@ -156,27 +179,28 @@ public class VNAppController {
 	}
 	// initialize function
 	private void initialize(ModelMap model) {
-		AppData.admin.setName("Cuong");
-		AppData.admin.setImg("1098.jpg");
+		MyHotelConst.user.setName("Cuong");
+		MyHotelConst.user.setImg("1098.jpg");
 		
-		List<Activity> listactivily = userService.getAllActivity();
-		List<HotelRoom> listrooms = hotelItemService.getAllRooms();
-		List<HotelService> listservices = hotelItemService.getAllHotelServices();
-		List<Customer> listusers = userService.getAllCustomers();
-		model.put("ad", AppData.admin);
-		model.put("listusers", listusers);
-		model.put("newNotifications", userService.getNewListNotification());
-		model.put("listactivily", listactivily);
-		model.put("listrooms", listrooms);
+		Date today = new Date();
+		model.put("today", DateTimeCalculator.getStrDateVN(today));
+		List<Reservation> listReservationToday = reservationService.getAllReservationsInDate(today);
+		List<HotelRoom> listRoomAvailable = hotelItemService.getAllRoomsAvailable();
+		List<Reservation> listRoomCheckin = reservationService.getRoomsBookedToday();
+		List<HotelService> listservices = new ArrayList<HotelService>();
+		
+		model.put("user", MyHotelConst.user);
+		
+		model.put("newNotifications", new ArrayList());
+		model.put("listReservationToday", listReservationToday);
+		model.put("listRoomAvailable", listRoomAvailable);
+		model.put("listRoomCheckin", listRoomCheckin);
 		model.put("listservices", listservices);
-		// model.put("listrooms", AppData.listrooms);
-		// model.put("listservices", AppData.listservices);
-		model.put("totalUsers", getX100SizeOfList(listusers));
-		model.put("totalMessage", getX100SizeOfList(listactivily));
-		model.put("totalRooms", getX100SizeOfList(listrooms));
+
+		model.put("totalReservationToday", getX100SizeOfList(listReservationToday));
+		model.put("totalRoomAvailable", getX100SizeOfList(listRoomAvailable));
+		model.put("totalRoomCheckin", getX100SizeOfList(listRoomCheckin));
 		model.put("totalServices", getX100SizeOfList(listservices));
-		// model.put("totalRooms", getX100SizeOfList(AppData.listrooms));
-		// model.put("totalServices", getX100SizeOfList(AppData.listservices));
 	}
 
 	private int getX100SizeOfList(List<?> list) {

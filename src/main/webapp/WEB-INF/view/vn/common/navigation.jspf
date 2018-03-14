@@ -4,7 +4,7 @@
         <div class="sm-st clearfix">
             <span class="sm-st-icon st-red"><i class="fa fa-user"></i></span>
             <div class="sm-st-info">
-                <span>${totalUsers}</span> Đơn phòng hôm nay
+                <span>${totalReservationToday}</span> Đơn phòng hôm nay
             </div>
         </div>
     </div>
@@ -12,7 +12,7 @@
         <div class="sm-st clearfix">
             <span class="sm-st-icon st-violet"><i class="fa fa-envelope-o"></i></span>
             <div class="sm-st-info">
-                <span>${totalMessage}</span> Số phòng còn
+                <span>${totalRoomAvailable}</span> Số phòng còn
             </div>
         </div>
     </div>
@@ -20,7 +20,7 @@
         <div class="sm-st clearfix">
             <span class="sm-st-icon st-blue"><i class="fa fa-building-o"></i></span>
             <div class="sm-st-info">
-                <span>${totalRooms}</span> Số phòng đang ở
+                <span>${totalRoomCheckin}</span> Số phòng đang ở
             </div>
         </div>
     </div>

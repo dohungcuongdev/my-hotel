@@ -104,29 +104,10 @@ public class RoomDAOImpl extends HotelItemDAOImpl<HotelRoom> implements RoomDAO 
 		}
 	}
 	
-    @Override
-    public List<HotelRoom> getAllRoomsBooked() {
-        List<HotelRoom> roomsBooked = new ArrayList<>();
-        BasicDBObject whereQuery = new BasicDBObject();
-        whereQuery.put("status", "booked");
-        DBCursor cursor = collection.find(whereQuery);
-        while (cursor.hasNext()) {
-        	DBObject obj = cursor.next();
-        	roomsBooked.add(fromJson3(obj, HotelRoom.class));
-        }
-        return roomsBooked;
-    }
-    
-    @Override
-    public List<HotelRoom> getAllRoomsAvailable() {
-        List<HotelRoom> roomsAvailable = new ArrayList<>();
-        BasicDBObject whereQuery = new BasicDBObject();
-        whereQuery.put("status", "available");
-        DBCursor cursor = collection.find(whereQuery);
-        while (cursor.hasNext()) {
-        	DBObject obj = cursor.next();
-        	roomsAvailable.add(fromJson3(obj, HotelRoom.class));
-        }
-        return roomsAvailable;
+    private void checkOutRoom(String name) {
+    	BasicDBObject document = new BasicDBObject();
+        document.append("$set", new BasicDBObject().append("status", "đã thanh toán"));
+        BasicDBObject searchQuery = new BasicDBObject().append("name", name);
+        collection.update(searchQuery, document);
     }
 }

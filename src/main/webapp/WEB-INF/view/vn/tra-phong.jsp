@@ -1,4 +1,4 @@
-<%@ include file="vn/common/sub-content.jspf"%>
+<%@ include file="common/sub-content.jspf"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="row">
     <div class="col-lg-12">
@@ -17,8 +17,8 @@
                     </div>
                     <div class="form-group">
                         <form:select class="form-control m-b-10" path="rental" id="rental">
-                            <form:option value="hour">Thuê tiếng</form:option>
-                            <form:option value="night">Qua đêm</form:option>
+                            <form:option value="Thuê tiếng">Thuê tiếng</form:option>
+                            <form:option value="Qua đêm">Qua đêm</form:option>
                         </form:select>
                     </div>
                     <div class="form-group">
@@ -98,7 +98,7 @@
         </section>
     </div>
 </div>
-<%@ include file="vn/common/footer.jspf"%>
+<%@ include file="common/footer.jspf"%>
 <script type="text/javascript">
 function checkReservationForm() {
 	$('#guest').css("border", "2px solid red");
