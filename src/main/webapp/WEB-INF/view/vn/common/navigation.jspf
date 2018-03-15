@@ -1,22 +1,22 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="row" style="margin-bottom:5px;">
-    <div class="col-md-3 tr-p" onclick="location.href = '${pageContext.request.contextPath}/manage-users.html'">
+    <div class="col-md-3 tr-p" onclick="location.href = '${pageContext.request.contextPath}/vn/don-phong-hom-nay.html'">
         <div class="sm-st clearfix">
-            <span class="sm-st-icon st-red"><i class="fa fa-user"></i></span>
+            <span class="sm-st-icon st-red"><i class="fa fa-envelope-o"></i></span>
             <div class="sm-st-info">
                 <span>${totalReservationToday}</span> Đơn phòng hôm nay
             </div>
         </div>
     </div>
-    <div class="col-md-3 tr-p" onclick="location.href = '${pageContext.request.contextPath}/message.html'">
+    <div class="col-md-3 tr-p" onclick="location.href = '${pageContext.request.contextPath}/vn/phong-con.html'">
         <div class="sm-st clearfix">
-            <span class="sm-st-icon st-violet"><i class="fa fa-envelope-o"></i></span>
+            <span class="sm-st-icon st-violet"><i class="fa fa-bed"></i></span>
             <div class="sm-st-info">
                 <span>${totalRoomAvailable}</span> Số phòng còn
             </div>
         </div>
     </div>
-    <div class="col-md-3 tr-p" onclick="location.href = '${pageContext.request.contextPath}/manage-rooms.html'">
+    <div class="col-md-3 tr-p" onclick="location.href = '${pageContext.request.contextPath}/vn/phong-dang-o.html'">
         <div class="sm-st clearfix">
             <span class="sm-st-icon st-blue"><i class="fa fa-building-o"></i></span>
             <div class="sm-st-info">
@@ -24,11 +24,11 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 tr-p" onclick="location.href = '${pageContext.request.contextPath}/manage-restaurant.html'">
+    <div class="col-md-3 tr-p" onclick="location.href = '${pageContext.request.contextPath}/vn/phu-thu.html'">
         <div class="sm-st clearfix">
-            <span class="sm-st-icon st-green"><i class="fa fa-food"></i></span>
+            <span class="sm-st-icon st-green"><i class="fa fa fa-money"></i></span>
             <div class="sm-st-info">
-                <span>${totalServices}</span> Dịch vụ
+                <span>${totalServices}</span> Phụ thu hôm nay
             </div>
         </div>
     </div>

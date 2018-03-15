@@ -31,21 +31,21 @@ public abstract class HotelItemDAO<T> extends JsonParserDAO {
 		BasicDBObject whereQuery = new BasicDBObject();
 		whereQuery.put("id", id);
 		DBObject obj = collection.findOne(whereQuery);
-		return (T) fromJson(obj, classOfT);
+		return (T) fromJson3(obj, classOfT);
 	}
 
 	public T getHotelItemByID(String _id) {
 		BasicDBObject whereQuery = new BasicDBObject();
 		whereQuery.put("_id", new ObjectId(_id));
 		DBObject obj = collection.findOne(whereQuery);
-		return (T) fromJson(obj, classOfT);
+		return (T) fromJson3(obj, classOfT);
 	}
 
 	public T getHotelItemByName(String name) {
 		BasicDBObject whereQuery = new BasicDBObject();
 		whereQuery.put("name", name);
 		DBObject obj = collection.findOne(whereQuery);
-		return (T) fromJson(obj, classOfT);
+		return (T) fromJson3(obj, classOfT);
 	}
 
 	public List<T> getAllHotelItems() {
@@ -55,7 +55,7 @@ public abstract class HotelItemDAO<T> extends JsonParserDAO {
 			DBObject obj = cursor.next();
 			// T t = (T) fromJson(obj, classOfT);
 			// System.out.println(t);
-			items.add((T) fromJson(obj, classOfT));
+			items.add((T) fromJson3(obj, classOfT));
 		}
 		return items;
 	}
@@ -67,7 +67,7 @@ public abstract class HotelItemDAO<T> extends JsonParserDAO {
 		DBCursor cursor = collection.find(whereQuery);
 		while (cursor.hasNext()) {
 			DBObject obj = cursor.next();
-			items.add((T) fromJson(obj, classOfT));
+			items.add((T) fromJson3(obj, classOfT));
 		}
 		return items;
 	}

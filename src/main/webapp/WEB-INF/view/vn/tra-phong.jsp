@@ -31,11 +31,12 @@
                         <label>Phòng</label>
                     </div>
                     <div class="form-group">
-                        <form:select class="form-control m-b-10" path="room" id="room">
-                            <form:option value="101">101 (VIP)</form:option>
-                            <form:option value="102">102</form:option>
-                        </form:select>
-                    </div>
+						<form:select class="form-control m-b-10" path="room" id="room">
+							<c:forEach var="entry" items="${roomsWithType}">
+								<form:option value="${entry.key}">${entry.key} (${entry.value})</form:option>
+							</c:forEach>
+						</form:select>
+					</div>
                     <div class="form-group">
                         <label>Giờ vào</label>
                     </div>
@@ -79,6 +80,12 @@
                         <form:input type="number" class="form-control" placeholder="Tổng tiền dịch vụ" path="servicePayment" onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
                     </div>
                     <div class="form-group">
+                        <label>Phụ thu</label>
+                    </div>
+                    <div class="form-group">
+                        <form:input type="text" class="form-control" placeholder="Phụ thu" path="additionDetails"/>
+                    </div>
+                    <div class="form-group">
                         <label>Tiền phụ thu</label>
                     </div>
                     <div class="form-group">
@@ -101,14 +108,15 @@
 <%@ include file="common/footer.jspf"%>
 <script type="text/javascript">
 function checkReservationForm() {
-	$('#guest').css("border", "2px solid red");
-	return false;
+/* 	$('#guest').css("border", "2px solid red");
+	return false; */
 }
 
 window.onload = function () { //first load page
-	var isoStr = new Date().toISOString();
-	$('#checkout').val(isoStr.substring(0,isoStr.length-8));
+	var isoStr = new Date().addHours(7).toISOString();
+	$('#checkout').val(isoStr.substring(0, isoStr.length - 8));
 	$("#rental").val('${newReservation.rental}');
+	$("#room").val('${newReservation.room}');
 	
 	let room = $('#room').val();
 	
@@ -136,4 +144,9 @@ window.onload = function () { //first load page
 	
 	
 };
+
+Date.prototype.addHours = function(h) {
+	this.setTime(this.getTime() + (h * 60 * 60 * 1000));
+	return this;
+}
 </script>

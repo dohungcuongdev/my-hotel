@@ -1,6 +1,7 @@
 package vn.service;
 
 import java.util.List;
+import java.util.Map;
 
 import vn.model.HotelRoom;
 
@@ -18,4 +19,5 @@ public interface HotelItemService {
 	public void checkOutRoom(String name);
 	public List<HotelRoom> getAllRoomsCheckin();
 	public List<HotelRoom> getAllRoomsAvailable();
+	public Map<String, String> getListRoomsWithType();
 }

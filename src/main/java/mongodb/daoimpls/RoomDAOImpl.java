@@ -103,11 +103,4 @@ public class RoomDAOImpl extends HotelItemDAOImpl<HotelRoom> implements RoomDAO 
 			updateRoom(room);
 		}
 	}
-	
-    private void checkOutRoom(String name) {
-    	BasicDBObject document = new BasicDBObject();
-        document.append("$set", new BasicDBObject().append("status", "đã thanh toán"));
-        BasicDBObject searchQuery = new BasicDBObject().append("name", name);
-        collection.update(searchQuery, document);
-    }
 }

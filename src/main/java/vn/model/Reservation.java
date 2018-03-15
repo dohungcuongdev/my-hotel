@@ -2,8 +2,6 @@ package vn.model;
 
 import java.util.Comparator;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBObject;
 
@@ -15,7 +13,7 @@ public class Reservation {
 	private String guest;  // khách hàng
 	private String rental; // thuê giờ - qua đêm
 	private String room;   // phòng
-	private String roomPrice; //giá phòng
+	private int roomPrice; //giá phòng
 	private String cMND;   // giấy tờ tùy thân (CMND - giấy tờ xe ...)
 	private String note;   // ghi chú (phòng này thu tiền đặc biệt - phòng này cần phụ thu thêm ...)
 	private String service;     // dịch vụ ( mì xào bò x2 , cocacola x 3 ... )
@@ -23,13 +21,16 @@ public class Reservation {
 	private String checkin; //giờ vào
 	private String checkout; //giờ ra
 	private String totalStayDuration; // tổng thời gian ở trong phòng
-	private int additionPayment; // phụ thu
+	private String additionDetails;  // phụ thu
+	private int additionPayment; // tiền phụ thu
 	private int totalPayment; // tổng tiền phải trả
 	private String status; // đã thanh toán chưa? phòng còn khách đang ở?
 	private String created_by; // người khai đơn
 	private String created_at;      // được khai lúc
 	private String last_modify_by;  // lần cuối cùng sửa bởi
 	private String last_modify_at;  // lần cuối cùng sửa lúc
+	private String listModifyDate;
+	private String listModifyUser;
 	
 	private RoomDAO roomDAO = new RoomDAOImpl();
 
@@ -125,11 +126,11 @@ public class Reservation {
 		this.rental = rental;
 	}
 	
-	public String getRoomPrice() {
+	public int getRoomPrice() {
 		return roomPrice;
 	}
 
-	public void setRoomPrice(String roomPrice) {
+	public void setRoomPrice(int roomPrice) {
 		this.roomPrice = roomPrice;
 	}
 
@@ -139,6 +140,14 @@ public class Reservation {
 
 	public void setServicePayment(int servicePayment) {
 		this.servicePayment = servicePayment;
+	}
+
+	public String getAdditionDetails() {
+		return additionDetails;
+	}
+
+	public void setAdditionDetails(String additionDetails) {
+		this.additionDetails = additionDetails;
 	}
 
 	public int getAdditionPayment() {
@@ -213,7 +222,28 @@ public class Reservation {
 	
 	//use for old DAOs: mongodb DAOs
 	public DBObject toDBObject() {
-		return BasicDBObjectBuilder.start("id", id).append("guest", guest).append("cMND", cMND).append("rental", rental).append("note", note).append("service", service).append("room", room).append("checkin", checkin).append("checkout", checkout).append("totalStayDuration", totalStayDuration).append("totalPayment", totalPayment).append("status", status).get();
+		return BasicDBObjectBuilder
+				.start("id", id)
+				.append("guest", guest)
+				.append("cMND", cMND)
+				.append("rental", rental)
+				.append("room", room)
+				.append("checkin", checkin)
+				.append("checkout", checkout)
+				.append("totalStayDuration", totalStayDuration)
+				.append("roomPrice", roomPrice)
+				.append("note", note)
+				.append("service", service)
+				.append("servicePayment", servicePayment)
+				.append("additionDetails", additionDetails)
+				.append("additionPayment", additionPayment)
+				.append("totalPayment", totalPayment)
+				.append("status", status)
+				.append("created_by", created_by)
+				.append("created_at", created_at)
+				.append("last_modify_by", last_modify_by)
+				.append("last_modify_at", last_modify_at)
+				.get();
 	}
 
 	@Override

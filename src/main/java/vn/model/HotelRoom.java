@@ -10,6 +10,8 @@ public class HotelRoom extends HotelItem {
 	private String status;
 	private int numpeople;
 	private String amenities;
+	private int hourPrice;
+	private int overnightPrice;
 
 	public HotelRoom() {
 	}
@@ -46,6 +48,22 @@ public class HotelRoom extends HotelItem {
 		this.amenities = amenities;
 	}
 
+	public int getHourPrice() {
+		return hourPrice;
+	}
+
+	public void setHourPrice(int hourPrice) {
+		this.hourPrice = hourPrice;
+	}
+
+	public int getOvernightPrice() {
+		return overnightPrice;
+	}
+
+	public void setOvernightPrice(int overnightPrice) {
+		this.overnightPrice = overnightPrice;
+	}
+
 	@Override
 	public String toString() {
 		return "HotelRoom [size=" + size + ", status=" + status + ", numpeople=" + numpeople + ", amenities="
@@ -56,10 +74,23 @@ public class HotelRoom extends HotelItem {
 
 	@Override
 	public DBObject toDBObject() {
-		return BasicDBObjectBuilder.start("id", id).append("name", name).append("type", type).append("size", size)
-				.append("price", price).append("numpeople", numpeople).append("status", status).append("img", img)
-				.append("img2", img2).append("details", details).append("amenities", amenities)
-				.append("created_by", created_by).append("created_at", created_at)
-				.append("last_modify_by", last_modify_by).append("last_modify_at", last_modify_at).get();
+		return BasicDBObjectBuilder
+				.start("id", id)
+				.append("name", name)
+				.append("type", type)
+				.append("size", size)
+				.append("price", price)
+				.append("overnightPrice", overnightPrice)
+				.append("numpeople", numpeople)
+				.append("status", status)
+				.append("img", img)
+				.append("img2", img2)
+				.append("details", details)
+				.append("amenities", amenities)
+				.append("created_by", created_by)
+				.append("created_at", created_at)
+				.append("last_modify_by", last_modify_by)
+				.append("last_modify_at", last_modify_at)
+				.get();
 	}
 }

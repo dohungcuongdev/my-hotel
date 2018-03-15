@@ -1,5 +1,0 @@
-{"_id":{"$oid":"5aa385ae6db1f43d1b5c571c"},"id":1,"rental":"night","guest":"Đỗ Hùng Cường","cMND":"123456789","note":"Thu CMND","service":"Mì xào bò","room":"101","checkin":"2018-03-11T05:34:12.015","checkout":"","totalStayDuration":"","totalPayment":0}
-{"_id":{"$oid":"5aa392c6c27abe09409ec643"},"id":2,"guest":"Test1","cMND":"123456789","note":"Thu CMND","service":"Mì xào bò","room":"101","checkin":"2018-03-11T05:34:12.015","checkout":"","totalStayDuration":"03:22:11","totalPayment":10000000}
-{"_id":{"$oid":"5aa544f35e96ce0ef0e31abb"},"id":3,"guest":"Đỗ Hùng Cường","cMND":"123123","note":"","service":"","room":"101","checkin":"2018-03-11T15:02","checkout":null,"totalStayDuration":null,"totalPayment":0}
-{"_id":{"$oid":"5aa5486c5e96ce0ef0475e30"},"id":4,"guest":"ghghgh","room":"101","cMND":"8343443","note":"","service":"","servicePayment":0,"checkin":"2018-03-11T15:16","additionPayment":0,"totalPayment":0}
-{"_id":{"$oid":"5aa54ec75e96ce0ef0e1897c"},"id":5,"guest":"Đỗ Hùng Cường","cMND":"12321312","note":"","service":"","room":"101","checkin":"2018-03-11T15:43","checkout":null,"totalStayDuration":null,"totalPayment":0}

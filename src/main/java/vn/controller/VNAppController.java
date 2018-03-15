@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import statics.helper.DateTimeCalculator;
 import vn.model.Reservation;
 import vn.service.HotelItemService;
 import vn.service.ReservationService;
+import vn.helper.VNCurrencyFormatter;
 import vn.model.HotelRoom;
 import vn.model.MyHotelConst;
 
@@ -65,6 +67,7 @@ public class VNAppController {
 	@RequestMapping(value = { "them-lich-dat-phong", "themlichdatphong" }, method = RequestMethod.GET)
 	public String themlichdatphong(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		model.addAttribute("newReservation", new Reservation());
+		initializeRoomsWithType(model);
 		return authInitializeRedirect(request, response, model, "them-lich-dat-phong");
 	}
 	
@@ -72,6 +75,7 @@ public class VNAppController {
 	@RequestMapping(value = { "sua-lich-dat-phong/{id}", "sualichdatphong/{id}" }, method = RequestMethod.GET)
 	public String sualichdatphong(@PathVariable(value = "id") int id, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		model.addAttribute("reservation", reservationService.getReservationByID(id));
+		initializeRoomsWithType(model);
 		return authInitializeRedirect(request, response, model, "sua-lich-dat-phong");
 	}
 	
@@ -79,6 +83,7 @@ public class VNAppController {
 	@RequestMapping(value = { "tra-phong/{id}", "traphong/{id}" }, method = RequestMethod.GET)
 	public String traPhong(@PathVariable(value = "id") int id, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		model.addAttribute("newReservation", reservationService.getReservationByID(id));
+		initializeRoomsWithType(model);
 		return authInitializeRedirect(request, response, model, "tra-phong");
 	}
 	
@@ -107,6 +112,7 @@ public class VNAppController {
 	@RequestMapping(value = "dat-phong", method = RequestMethod.POST)
 	public String xuLyDatPhong(@ModelAttribute(value = "newReservation") Reservation newReservation, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		initialize(model);
+		initializeRoomsWithType(model);
 		model.addAttribute("reservation", reservationService.findAndAddNewReservation(newReservation));
 		return "sua-lich-dat-phong";
 	}
@@ -115,6 +121,7 @@ public class VNAppController {
 	@RequestMapping(value = "sua", method = RequestMethod.POST)
 	public String xuLySua(@ModelAttribute(value = "reservation") Reservation reservation, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		initialize(model);
+		initializeRoomsWithType(model);
 		System.out.println(reservation);
 		model.addAttribute("reservation", reservationService.findAnUpdateReservation(reservation));
 		return "sua-lich-dat-phong";
@@ -142,6 +149,22 @@ public class VNAppController {
 			
 	}
 	
+	// phu thu
+	@RequestMapping(value = { "phu-thu", "phuthu" }, method = RequestMethod.GET)
+	public String phuThu(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		initializeAdditionalPayment(model);
+		return authInitializeRedirect(request, response, model, "phu-thu");
+	}
+	
+	@RequestMapping(value = { "phu-thu/{additionDetails}/{additionPayment1}/{additionPayment2}", "phuthu/{additionDetails}/{additionPayment1}/{additionPayment2}" }, method = RequestMethod.GET)
+	public String phuThu3Param(@ModelAttribute(value = "additionDetails") String additionDetails, @ModelAttribute(value = "additionPayment1") int additionPayment1, @ModelAttribute(value = "additionPayment2") int additionPayment2, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		MyHotelConst.additionDetails = additionDetails;
+    	MyHotelConst.additionPayment1 = additionPayment1;
+    	MyHotelConst.additionPayment2 = additionPayment2;
+    	initializeAdditionalPayment(model);
+		return authInitializeRedirect(request, response, model, "phu-thu");
+	}
+	
 	// thu nhap hom nay
 	@RequestMapping(value = { "thu-nhap-theo-ngay", "thunhaptheongay" }, method = RequestMethod.GET)
 	public String thuNhapHomNay(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
@@ -166,10 +189,19 @@ public class VNAppController {
 	
 	
 	
+	private void initializeAdditionalPayment(ModelMap model) {
+		int totalAdditionalPayment = MyHotelConst.additionPayment1 + MyHotelConst.additionPayment2;
+	    model.put("additionDetails", MyHotelConst.wellDisplayAdditionDetails());
+		model.put("additionPayment1", MyHotelConst.additionPayment1);
+		model.put("additionPayment2", MyHotelConst.additionPayment2);
+		model.put("additionPayment", VNCurrencyFormatter.wellDisplayNumber(totalAdditionalPayment));
+		model.put("additionPaymentAlpha", VNCurrencyFormatter.numberToString(totalAdditionalPayment));
+	}
 	
 	
-	
-	
+	private void initializeRoomsWithType(ModelMap model) {
+		model.put("roomsWithType", hotelItemService.getListRoomsWithType());
+	}
 	
 
 	private String authInitializeRedirect(HttpServletRequest request, HttpServletResponse response, ModelMap model,

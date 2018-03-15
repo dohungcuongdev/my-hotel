@@ -6,6 +6,7 @@
 package vn.daos;
 
 import java.util.List;
+import java.util.Map;
 
 import vn.model.HotelRoom;
 
@@ -29,4 +30,5 @@ public interface RoomDAO {
 	public List<HotelRoom> getAllRoomsCheckin();
 	public List<HotelRoom> getAllRoomsAvailable();
 	public String getTypeByRoom(String roomName);
+	public Map<String, String> getListRoomsWithType();
 }

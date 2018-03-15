@@ -31,8 +31,13 @@ public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO 
 	
 	private DBCollection collection; 
 	
-	public ReservationDAOImpl() throws UnknownHostException {
-		collection = MongoDbConnector.createConnection("my-hotel-reservation");
+	public ReservationDAOImpl() {
+		try {
+			collection = MongoDbConnector.createConnection("my-hotel-reservation");
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -179,17 +184,34 @@ public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO 
     //db.getCollection('my-hotel-reservation').find({ checkin : { $gte : "2018-03-11T06:00", $lte : "2018-03-14T23:20"}})
     @Override
     public Income getIncomeFromTo(String from, String to) {
-        List<Reservation> roomsBookedToday = new ArrayList<>();
+    	Income income = new Income();
+    	int roomPayment = 0;
+    	int totalServicePayment = 0;
+    	int additionPayment = 0;
+    	int totalValue = 0;
+        List<Reservation> reservationsFromTo = new ArrayList<>();
         BasicDBObject orderBy = new BasicDBObject();
         BasicDBObject whereQuery = new BasicDBObject();
-        whereQuery.put("status", "Khách đang ở");
+        String query = "{ $gte : '" + from + ", $lte : '" + to + "'}";
+        whereQuery.put("checkin", query);
         orderBy.put("checkin", -1);
         DBCursor cursor = collection.find(whereQuery).sort(orderBy);
         while (cursor.hasNext()) {
         	DBObject obj = cursor.next();
-        	Reservation reservationRoomToday = fromJson3(obj, Reservation.class);
-        	roomsBookedToday.add(reservationRoomToday);
+        	Reservation reservationFromTo = fromJson3(obj, Reservation.class);
+        	reservationsFromTo.add(reservationFromTo);
+        	roomPayment += reservationFromTo.getRoomPrice();
+        	totalServicePayment += reservationFromTo.getServicePayment();
+        	additionPayment += reservationFromTo.getAdditionPayment();
+        	totalValue += reservationFromTo.getTotalPayment();
         }
-        return null;
+        income.setFrom(from);
+        income.setTo(to);
+        income.setReservations(reservationsFromTo);
+        income.setTotalValue(roomPayment);
+        income.setTotalValue(totalServicePayment);
+        income.setTotalValue(additionPayment);
+        income.setTotalValue(totalValue);
+        return income;
     }
 }

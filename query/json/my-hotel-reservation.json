@@ -1,0 +1,2 @@
+{"_id":{"$oid":"5aa9e4d2c27abe0418cc5606"},"id":1,"guest":"Đỗ Hùng Cường","cMND":"3131333131311","rental":"Thuê tiếng","note":"","service":"","room":"101","checkin":"2018-03-15T10:13","checkout":null,"totalStayDuration":null,"totalPayment":0,"status":"Khách đang ở"}
+{"_id":{"$oid":"5aa9ed2ac27abe0418cc56a1"},"id":2,"guest":"Đỗ Hùng Cường","cMND":"3131333131311","rental":"Thuê tiếng","note":"","service":"","room":"103","checkin":"2018-03-15T10:48","checkout":null,"totalStayDuration":null,"totalPayment":0,"status":"Khách đang ở"}

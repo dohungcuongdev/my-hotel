@@ -41,8 +41,8 @@
 				             <td>${reservation.note}</td>
 				             <td>${reservation.service}</td>
 				             <td><span style="font-size: 14px" class="${reservation.getAutoGenColorClassRoom()}">${reservation.room}</span></td>
-				             <td>${reservation.checkin}</td>
-				             <td>${reservation.checkout}</td>
+				             <td>${reservation.checkin.substring(11)}</td>
+				             <td>${reservation.checkout.substring(11)}</td>
 				             <td>${reservation.totalStayDuration}</td>
 				             <td>${reservation.totalPayment}</td>
 				             <td><button onclick="location.href = '${pageContext.request.contextPath}/vn/sua-lich-dat-phong/${reservation.id}.html'" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i></button></td>

@@ -7,7 +7,9 @@ package vn.daos.impl;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,5 +129,17 @@ public class RoomDAOImpl extends HotelItemDAO<HotelRoom> implements RoomDAO {
 		whereQuery.put("name", roomName);
 		DBObject obj = collection.findOne(whereQuery);
 		return fromJson3(obj, HotelRoom.class).getType();
+    }
+    
+    @Override
+    public Map<String, String> getListRoomsWithType() {
+    	Map<String, String> listRoomsWithType = new HashMap<>();
+		DBCursor cursor = collection.find();
+		while (cursor.hasNext()) {
+			DBObject obj = cursor.next();
+			HotelRoom room = fromJson3(obj, classOfT);
+			listRoomsWithType.put(room.getName(), room.getType());
+		}
+    	return listRoomsWithType;
     }
 }

@@ -41,8 +41,8 @@
 				             <td>${room.checkin}</td>
 				             <td>${room.service}</td>
 				             <td>${room.note}</td>
-				             <td><button onclick="location.href = '${pageContext.request.contextPath}/room/${room.room}.html'" class="btn btn-default btn-xs"><i class="fa fa-check"></i></button></td>
-				             <td><button onclick="location.href = '${pageContext.request.contextPath}/edit-room/${room.room}.html'" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i></button></td>
+				             <td><button onclick="location.href = '${pageContext.request.contextPath}/vn/tra-phong/${room.id}.html'" class="btn btn-default btn-xs"><i class="fa fa-check"></i></button></td>
+				             <td><button onclick="location.href = '${pageContext.request.contextPath}/vn/sua-lich-dat-phong-phong/${room.id}.html'" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i></button></td>
 				             <td><button onclick="deleteRoom('${pageContext.request.contextPath}/remove-room/${room.id}.html')" class="btn btn-default btn-xs"><i class="fa fa-times"></i></button></td>
 				         </tr>
 				     </c:forEach>

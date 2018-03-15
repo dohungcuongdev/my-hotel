@@ -7,6 +7,9 @@ public class Income {
 	private String from;
 	private String to;
 	private List<Reservation> reservations;
+	private int roomPayment;
+	private int totalServicePayment;
+	private int additionPayment;
 	private int totalValue;
 
 	public String getFrom() {
@@ -39,6 +42,30 @@ public class Income {
 
 	public void setTotalValue(int totalValue) {
 		this.totalValue = totalValue;
+	}
+
+	public int getRoomPayment() {
+		return roomPayment;
+	}
+
+	public void setRoomPayment(int roomPayment) {
+		this.roomPayment = roomPayment;
+	}
+
+	public int getTotalServicePayment() {
+		return totalServicePayment;
+	}
+
+	public void setTotalServicePayment(int totalServicePayment) {
+		this.totalServicePayment = totalServicePayment;
+	}
+
+	public int getAdditionPayment() {
+		return additionPayment;
+	}
+
+	public void setAdditionPayment(int additionPayment) {
+		this.additionPayment = additionPayment;
 	}
 
 	@Override

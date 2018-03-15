@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="common/sub-content.jspf"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="row">
@@ -29,17 +30,17 @@
 						<label>Giấy tờ tùy thân</label>
 					</div>
 					<div class="form-group">
-						<form:input required="true" type="number" class="form-control"
-							placeholder="Ví dụ: Số CMND ..." path="cMND"
-							onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
+						<form:input required="true" type="text" class="form-control"
+							placeholder="Ví dụ: Số CMND ..." path="cMND" />
 					</div>
 					<div class="form-group">
 						<label>Phòng</label>
 					</div>
 					<div class="form-group">
 						<form:select class="form-control m-b-10" path="room" id="room">
-							<form:option value="101">101 (VIP)</form:option>
-							<form:option value="102">102</form:option>
+							<c:forEach var="entry" items="${roomsWithType}">
+								<form:option value="${entry.key}">${entry.key} (${entry.value})</form:option>
+							</c:forEach>
 						</form:select>
 					</div>
 					<div class="form-group">

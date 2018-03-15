@@ -53,6 +53,13 @@ public class DateTimeCalculator {
 		cal.add(Calendar.HOUR_OF_DAY, 7);
 		return cal.getTime();
 	}
+	
+	public static Date getICTDateTimeNoSecond(String dateTime) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(formatDateTime(dateTime.replaceFirst("T", " "), "yyyy-MM-dd HH:mm"));
+		cal.add(Calendar.HOUR_OF_DAY, 7);
+		return cal.getTime();
+	}
 
 	public static String getStringICTDateTime(String dateTime) {
 		Date date = formatDateTime(dateTime, "E MMM dd HH:mm:ss Z yyyy");
@@ -101,5 +108,22 @@ public class DateTimeCalculator {
 	public static String getStrDateTimeVNToday() {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		return formatter.format(new Date());
+	}
+	
+	public static String convertSecondsToHMmSs(long milliseconds) {
+		long seconds, minutes, hours;  
+		seconds = milliseconds / 1000;  
+		minutes = seconds / 60;
+		seconds = seconds % 60;
+		hours = minutes / 60;
+		minutes = minutes % 60;
+	    return String.format("%d:%02d:%02d", hours,minutes,seconds);
+	}
+	
+	public static long millToHourUp(long milliseconds) {
+		final int MILLI_TO_HOUR = 1000 * 60 * 60;
+		long remainder = milliseconds % MILLI_TO_HOUR;
+		long millToHour = milliseconds/ MILLI_TO_HOUR;
+		return (remainder <= 10*60*1000) ? millToHour : millToHour + 1; // ở lố quá 10 phút tính giờ tiếp theo
 	}
 }

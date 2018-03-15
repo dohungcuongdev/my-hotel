@@ -1,6 +1,7 @@
 package vn.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import vn.service.HotelItemService;
 public class HotelItemServiceImpl implements HotelItemService {
 
 	@Autowired
-	RoomDAO roomDAO;
+	private RoomDAO roomDAO;
 
 	@Override
 	public HotelRoom getRoomByID(int id) {
@@ -93,6 +94,11 @@ public class HotelItemServiceImpl implements HotelItemService {
 	@Override
 	public List<HotelRoom> getAllRoomsAvailable() {
 		return roomDAO.getAllRoomsAvailable();
+	}
+
+	@Override
+	public Map<String, String> getListRoomsWithType() {
+		return roomDAO.getListRoomsWithType();
 	}
 
 }
