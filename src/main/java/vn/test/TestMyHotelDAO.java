@@ -3,8 +3,9 @@ package vn.test;
 import java.net.UnknownHostException;
 
 import vn.daos.impl.ReservationDAOImpl;
-import vn.model.HourRentalBill;
+import vn.model.AdditionalPayment;
 import vn.model.Reservation;
+import vn.service.impl.AdditionalPaymentServiceImpl;
 import vn.service.impl.ReservationServiceImpl;
 
 public class TestMyHotelDAO {
@@ -23,17 +24,11 @@ public class TestMyHotelDAO {
 	}
 
 	public static void main(String[] args) throws UnknownHostException {
-		//System.out.println(new Room(1,"101", "VIP").toBookedRoomString());
-
-//		RoomDAO roomDAO = new RoomDAOImpl();
-//		System.out.println(roomDAO.getListRoomsWithType());
-		
-		ReservationServiceImpl rService = new ReservationServiceImpl();
-		Reservation r = rService.getReservationByID(1);
-		r.setCheckout("2018-03-15T14:35");
-		r.setAdditionDetails("Thứ 7");
-		HourRentalBill h = rService.getHourRentalBillForReservation(r);
-		System.out.println(rService.getReservationByHourRentalBill(h, r));
+		AdditionalPaymentServiceImpl ad = new AdditionalPaymentServiceImpl();
+		AdditionalPayment a = ad.getSelectedAdditionalPayment();
+		ReservationServiceImpl rs = new ReservationServiceImpl();
+		Reservation r = rs.getReservationByID(1);
+		System.out.println(rs.getReservationByAdditionalPayment(r, a));
 
 	}
 	

@@ -1,169 +1,14 @@
 <%@ include file="common/sub-content.jspf"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="row">
 	<div class="col-lg-12">
 		<section class="panel">
-			<header class="panel-heading"> Phụ Thu Hôm Nay </header>
-			<center><h4><b style="color:#4697ce">Phòng Thường</b></h4></center>
-			<div class="panel-body">
-				<form class="form-horizontal tasi-form" method="get">
-					<div class="form-group has-success">
-						<label class="col-sm-2 control-label col-lg-2" for="inputSuccess">Thêm Tiền Phòng</label>
-						<div class="col-lg-10">
-							<input type="text" value="" class="form-control"
-								id="inputHoliday" oninput="evtInput()" value="0"
-								onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
-						</div>
-					</div>
-					<div class="form-group has-warning">
-						<label class="col-sm-2 control-label col-lg-2" for="inputWarning">Tiền Giờ Phụ Thu</label>
-						<div class="col-lg-10">
-							<input type="text" class="form-control" id="inputSaturday"
-								oninput="evtInput()" value="0"
-								onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
-						</div>
-					</div>
-					<div class="form-group has-error">
-						<label class="col-sm-2 control-label col-lg-2" for="inputError">Qua Đêm Phụ Thu</label>
-						<div class="col-lg-10">
-							<input type="text" class="form-control" id="inputSunday"
-								oninput="evtInput()" value="0"
-								onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
-						</div>
-					</div>
-				</form>
-			</div>
-			<center><h4><b style="color: #F05050">Phòng VIP</b></h4></center>
+			<header class="panel-heading"> Phụ Thu Hôm Nay - ${today}</header>
 						<div class="panel-body">
-				<form class="form-horizontal tasi-form" method="get">
-					<div class="form-group has-success">
-						<label class="col-sm-2 control-label col-lg-2" for="inputSuccess">Thêm Tiền Phòng</label>
-						<div class="col-lg-10">
-							<input type="text" value="" class="form-control"
-								id="inputHoliday" oninput="evtInput()" value="0"
-								onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
-						</div>
-					</div>
-					<div class="form-group has-warning">
-						<label class="col-sm-2 control-label col-lg-2" for="inputWarning">Tiền Giờ Phụ Thu</label>
-						<div class="col-lg-10">
-							<input type="text" class="form-control" id="inputSaturday"
-								oninput="evtInput()" value="0"
-								onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
-						</div>
-					</div>
-					<div class="form-group has-error">
-						<label class="col-sm-2 control-label col-lg-2" for="inputError">Qua Đêm Phụ Thu</label>
-						<div class="col-lg-10">
-							<input type="text" class="form-control" id="inputSunday"
-								oninput="evtInput()" value="0"
-								onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
-						</div>
-					</div>
-				</form>
-			<br>
-			<hr>
-			</div>
-			<div class="panel-body">
-				<table>
-					<thead>
-						<th class="tr-p" onclick="sortAlpha(0,'table-rooms')">Ngày</th>
-						<th class="tr-p">Áp Dụng Cho Hôm Nay</th>
-						<th class="tr-p">Áp Dụng</th>
-					</thead>
-					<tbody>
-						<tr>
-							<td style="color: #27c24c"><b>Ngày Lễ</b></td>
-							<td><button type="button" class="btn btn-success"
-									onclick="selectAdditionPayment0()">Chọn</button></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td style="color: #f39c12"><b>Thứ Bảy</b></td>
-							<td><button type="button" class="btn btn-warning"
-									onclick="selectAdditionPayment1()">Chọn</button>
-							<td></td>
-						</tr>
-						<tr>
-							<td style="color: #f05050"><b>Chủ nhật</b></td>
-							<td><button type="button" class="btn btn-danger"
-									onclick="selectAdditionPayment2()">Chọn</button></td>
-							<td>
-								<div style="color:#45cf95;">
-	                                    <b><i class="fa fa-check"></i>Đã Chọn</b>
-	                            </div>
-                            </td>
-						</tr>
-						<tr>
-							<td style="color: #4697ce"><b>Ngày Lễ + Thứ Bảy</b>
-							</td>
-							<td><button type="button" class="btn btn-primary"
-									onclick="selectAdditionPayment01()">Chọn</button></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td style="color: #343a40"><b>Ngày Lễ + Chủ nhật</b>
-							<td><button type="button" class="btn btn-dark"
-									onclick="selectAdditionPayment02()">Chọn</button></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
 				<br>
-				<hr>
-				<br>
+				<center><b><h1 style="color:#AC75F0" id="titleAD">Phụ Thu: ${additionDetails}</h1></b></center>
 			    <br>
-				<table>
-					<thead>
-						<th class="tr-p" onclick="sortAlpha(0,'table-rooms')">Ngày</th>
-						<th class="tr-p" onclick="sortNum(1,'table-rooms')">Tiền Phụ
-							Thu Phòng Thường</th>
-						<th class="tr-p" onclick="sortNum(2,'table-rooms')">Tiền Phụ
-							Thu Phòng VIP</th>
-						<th class="tr-p">Áp Dụng Cho Hôm Nay</th>
-					</thead>
-					<tbody>
-						<tr>
-							<td style="color: #27c24c"><b>Ngày Lễ</b></td>
-							<td><b id="holiday">0</b></td>
-							<td><b id="holidayVIP">0</b></td>
-							<td><button type="button" class="btn btn-success"
-									onclick="selectAdditionPayment0()">Chọn</button></td>
-						</tr>
-						<tr>
-							<td style="color: #f39c12"><b>Thứ Bảy</b></td>
-							<td><b id="saturday">0</b></td>
-							<td><b id="saturdayVIP">0</b></td>
-							<td><button type="button" class="btn btn-warning"
-									onclick="selectAdditionPayment1()">Chọn</button>
-						</tr>
-						<tr>
-							<td style="color: #f05050"><b>Chủ nhật</b></td>
-							<td><b id="sunday">0</b></td>
-							<td><b id="sundayVIP">0</b></td>
-							<td><button type="button" class="btn btn-danger"
-									onclick="selectAdditionPayment2()">Chọn</button></td>
-						</tr>
-						<tr>
-							<td style="color: #4697ce"><b>Ngày Lễ + Thứ Bảy</b>
-							<td><b id="holiday7">0</b></td>
-							<td><b id="holiday7VIP">0</b></td>
-							</td>
-							<td><button type="button" class="btn btn-primary"
-									onclick="selectAdditionPayment01()">Chọn</button></td>
-						</tr>
-						<tr>
-							<td style="color: #343a40"><b>Ngày Lễ + Chủ nhật</b>
-							<td><b id="holiday8">0</b></td>
-							<td><b id="holiday8VIP">0</b></td>
-							</td>
-							<td><button type="button" class="btn btn-dark"
-									onclick="selectAdditionPayment02()">Chọn</button></td>
-						</tr>
-					</tbody>
-				</table>
-				<br>
-				<hr>
 				<br>
 				<div id="result">
 					<div class="col-md-4">
@@ -181,8 +26,8 @@
 							<div class="stat-icon" style="color: #4697ce">
 								<i class="fa fa-dollar fa-3x stat-elem"></i>
 							</div>
-							<h5 class="stat-info">${additionPayment}</h5>
-							<h5 class="stat-info">${additionPaymentAlpha}</h5>
+							<h5 class="stat-info">${additionalNormalRoomPrice}</h5>
+							<h5 class="stat-info">${additionalNormalRoomPriceStr}</h5>
 						</div>
 					</div>
 					<div class="col-md-4">
@@ -191,8 +36,8 @@
 							<div class="stat-icon" style="color: #F05050">
 								<i class="fa fa-dollar fa-3x stat-elem"></i>
 							</div>
-							<h5 class="stat-info">${additionPayment}</h5>
-							<h5 class="stat-info">${additionPaymentAlpha}</h5>
+							<h5 class="stat-info">${additionalVIPRoomPrice}</h5>
+							<h5 class="stat-info">${additionalVIPRoomPriceStr}</h5>
 						</div>
 					</div>
 				</div>
@@ -215,8 +60,8 @@
 							<div class="stat-icon" style="color: #4697ce">
 								<i class="fa fa-dollar fa-3x stat-elem"></i>
 							</div>
-							<h5 class="stat-info">${additionPayment}</h5>
-							<h5 class="stat-info">${additionPaymentAlpha}</h5>
+							<h5 class="stat-info">${additionalNormalHourPrice}</h5>
+							<h5 class="stat-info">${additionalNormalHourPriceStr}</h5>
 						</div>
 					</div>
 					<div class="col-md-4">
@@ -225,8 +70,8 @@
 							<div class="stat-icon" style="color: #F05050">
 								<i class="fa fa-dollar fa-3x stat-elem"></i>
 							</div>
-							<h5 class="stat-info">${additionPayment}</h5>
-							<h5 class="stat-info">${additionPaymentAlpha}</h5>
+							<h5 class="stat-info">${additionalVIPHourPrice}</h5>
+							<h5 class="stat-info">${additionalVIPHourPriceStr}</h5>
 						</div>
 					</div>
 				</div>
@@ -249,8 +94,8 @@
 							<div class="stat-icon" style="color: #4697ce">
 								<i class="fa fa-dollar fa-3x stat-elem"></i>
 							</div>
-							<h5 class="stat-info">${additionPayment}</h5>
-							<h5 class="stat-info">${additionPaymentAlpha}</h5>
+							<h5 class="stat-info">${additionalNormalNightPrice}</h5>
+							<h5 class="stat-info">${additionalNormalNightPriceStr}</h5>
 						</div>
 					</div>
 					<div class="col-md-4">
@@ -259,21 +104,225 @@
 							<div class="stat-icon" style="color: #F05050">
 								<i class="fa fa-dollar fa-3x stat-elem"></i>
 							</div>
-							<h5 class="stat-info">${additionPayment}</h5>
-							<h5 class="stat-info">${additionPaymentAlpha}</h5>
+							<h5 class="stat-info">${additionalVIPNightPrice}</h5>
+							<h5 class="stat-info">${additionalVIPNightPriceStr}</h5>
 						</div>
 					</div>
 				</div>
+			</div>
+			<hr>
+			<br>
+			<center><h4><b style="color:#4697ce">Phòng Thường</b></h4></center>
+			<div class="panel-body">
+				<form class="form-horizontal tasi-form" method="get">
+					<div class="form-group has-success">
+						<label class="col-sm-2 control-label col-lg-2" for="inputSuccess">Thêm Tiền Phòng</label>
+						<div class="col-lg-10">
+							<input type="text" class="form-control"
+								id="additionalNormalRoomPriceInput" oninput="evtInput()" value="0"
+								onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+						</div>
+					</div>
+					<div class="form-group has-warning">
+						<label class="col-sm-2 control-label col-lg-2" for="inputWarning">Tiền Giờ Phụ Thu</label>
+						<div class="col-lg-10">
+							<input type="text" class="form-control" id="additionalNormalHourPriceInput"
+								oninput="evtInput()" value="0"
+								onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+						</div>
+					</div>
+					<div class="form-group has-error">
+						<label class="col-sm-2 control-label col-lg-2" for="inputError">Qua Đêm Phụ Thu</label>
+						<div class="col-lg-10">
+							<input type="text" class="form-control" id="additionalNormalNightPriceInput"
+								oninput="evtInput()" value="0"
+								onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+						</div>
+					</div>
+				</form>
+			</div>
+			<center><h4><b style="color: #F05050">Phòng VIP</b></h4></center>
+			<div class="panel-body">
+				<form class="form-horizontal tasi-form" method="get">
+					<div class="form-group has-success">
+						<label class="col-sm-2 control-label col-lg-2" for="inputSuccess">Thêm Tiền Phòng</label>
+						<div class="col-lg-10">
+							<input type="text" class="form-control"
+								id="additionalVIPRoomPriceInput" oninput="evtInput()" value="0"
+								onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+						</div>
+					</div>
+					<div class="form-group has-warning">
+						<label class="col-sm-2 control-label col-lg-2" for="inputWarning">Tiền Giờ Phụ Thu</label>
+						<div class="col-lg-10">
+							<input type="text" class="form-control" id="additionalVIPHourPriceInput"
+								oninput="evtInput()" value="0"
+								onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+						</div>
+					</div>
+					<div class="form-group has-error">
+						<label class="col-sm-2 control-label col-lg-2" for="inputError">Qua Đêm Phụ Thu</label>
+						<div class="col-lg-10">
+							<input type="text" class="form-control" id="additionalVIPNightPriceInput"
+								oninput="evtInput()" value="0"
+								onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+						</div>
+					</div>
+				</form>
+			<br>
+			Thêm tên để áp dụng loại phụ thu này: <input type="text" class="form-control" id="additionDetailsInput">
+			<div class="panel-body">
+                 <center><button type="button" onclick="addNewAdditionPayment()" class="btn btn-success">Áp Dụng Phụ Thu Này <i class="fa fa-paperclip "></i></button></center>
+            </div>
+			<br>
+			<hr>
+			</div>
+			<div class="panel-body">
+			<center><h4><b style="color:#fa8564">Áp dụng phụ thu có sẵn</b></h4></center>
+			<br>
+				<table>
+					<thead>
+						<th class="tr-p" onclick="sortAlpha(0,'table-rooms')">STT</th>
+						<th class="tr-p" onclick="sortAlpha(0,'table-rooms')">Ngày</th>
+						<th class="tr-p">Đã Áp Dụng</th>
+						<th class="tr-p">Áp Dụng Cho Hôm Nay</th>
+					</thead>
+					<tbody>
+					<c:forEach var="additionalPayment" items="${allAdditionalPayments}" varStatus="loop">
+						<c:if test="${additionalPayment.id==1}">  
+							<tr>
+								<td>${loop.index + 1}</td>
+								<td style="color: #27c24c"><b>${additionalPayment.additionDetails}</b></td>
+								<td>
+								<c:if test="${additionalPayment.selected == true}">
+									<div style="color:#45cf95;">
+	                                    <b><i class="fa fa-check"></i>Đã Chọn</b>
+	                            	</div>
+								</c:if>
+								</td>
+								<td><button type="button" class="btn btn-success"
+										onclick="selectAdditionPayment('${additionalPayment.id}', '${selectedID}')">Chọn</button></td>
+							</tr>
+						</c:if>
+						<c:if test="${additionalPayment.id==2}">  
+							<tr>
+								<td>${loop.index + 1}</td>
+								<td style="color: #f39c12"><b>${additionalPayment.additionDetails}</b></td>
+								<td>
+								<c:if test="${additionalPayment.selected == true}">
+									<div style="color:#45cf95;">
+	                                    <b><i class="fa fa-check"></i>Đã Chọn</b>
+	                            	</div>
+								</c:if>
+								</td>
+								<td><button type="button" class="btn btn-warning"
+										onclick="selectAdditionPayment('${additionalPayment.id}', '${selectedID}')">Chọn</button></td>
+							</tr>
+						</c:if>
+						<c:if test="${additionalPayment.id==3}">  
+							<tr>
+								<td>${loop.index + 1}</td>
+								<td style="color: #f05050"><b>${additionalPayment.additionDetails}</b></td>
+								<td>
+								<c:if test="${additionalPayment.selected == true}">
+									<div style="color:#45cf95;">
+	                                    <b><i class="fa fa-check"></i>Đã Chọn</b>
+	                            	</div>
+								</c:if>
+								</td>
+								<td><button type="button" class="btn btn-danger"
+										onclick="selectAdditionPayment('${additionalPayment.id}', '${selectedID}')">Chọn</button></td>
+							</tr>
+						</c:if>
+						<c:if test="${additionalPayment.id==4}">  
+							<tr>
+								<td>${loop.index + 1}</td>
+								<td style="color: #4697ce"><b>${additionalPayment.additionDetails}</b></td>
+								<td>
+								<c:if test="${additionalPayment.selected == true}">
+									<div style="color:#45cf95;">
+	                                    <b><i class="fa fa-check"></i>Đã Chọn</b>
+	                            	</div>
+								</c:if>
+								</td>
+								<td><button type="button" class="btn btn-primary"
+										onclick="selectAdditionPayment('${additionalPayment.id}', '${selectedID}')">Chọn</button></td>
+							</tr>
+						</c:if>  
+						<c:if test="${additionalPayment.id==5}">  
+							<tr>
+								<td>${loop.index + 1}</td>
+								<td style="color:#343a40"><b>${additionalPayment.additionDetails}</b></td>
+								<td>
+								<c:if test="${additionalPayment.selected == true}">
+									<div style="color:#45cf95;">
+	                                    <b><i class="fa fa-check"></i>Đã Chọn</b>
+	                            	</div>
+								</c:if>
+								</td>
+								<td><button type="button" class="btn btn-dark"
+										onclick="selectAdditionPayment('${additionalPayment.id}', '${selectedID}')">Chọn</button></td>
+							</tr>
+						</c:if>
+						<c:if test="${additionalPayment.id==6}">  
+							<tr>
+								<td>${loop.index + 1}</td>
+								<td style="color:gray"><b>${additionalPayment.additionDetails}</b></td>
+								<td>
+								<c:if test="${additionalPayment.selected == true}">
+									<div style="color:#45cf95;">
+	                                    <b><i class="fa fa-check"></i>Đã Chọn</b>
+	                            	</div>
+								</c:if>
+								</td>
+								<td><button type="button" class="btn"
+										onclick="selectAdditionPayment('${additionalPayment.id}', '${selectedID}')">Chọn</button></td>
+							</tr>
+						</c:if>
+						<c:if test="${additionalPayment.id>6}">  
+							<tr>
+								<td>${loop.index + 1}</td>
+								<td><b>${additionalPayment.additionDetails}</b></td>
+								<td>
+								<c:if test="${additionalPayment.selected == true}">
+									<div style="color:#45cf95;">
+	                                    <b><i class="fa fa-check"></i>Đã Chọn</b>
+	                            	</div>
+								</c:if>
+								</td>
+								<td><button type="button" class="btn btn-black-white"
+										onclick="selectAdditionPayment('${additionalPayment.id}', '${selectedID}')">Chọn</button></td>
+							</tr>
+						</c:if>
+						</c:forEach>
+					</tbody>
+				</table>
 			</div>
 		</section>
 	</div>
 </div>
 <%@ include file="common/footer.jspf"%>
 <style>
+.btn-black-white {
+    background-color: white;
+    color: black;
+    border: 2px solid #555555;
+}
+
+.btn-black-white:hover {
+    background-color: white;
+    color: black;
+}
+
 .btn-dark {
 	color: #fff;
 	background-color: #343a40;
 	border-color: #343a40;
+}
+
+.btn-dark:hover {
+    background-color: #555555;
+    color: white;
 }
 
 hr {
@@ -286,99 +335,50 @@ hr {
 }
 </style>
 <script>
-	function notAcceptNull(data) {
+	function notAcceptNullNumber(data) {
 		if (data == null || typeof data == "undefined" || isNaN(data)
 				|| data == "") {
 			return 0;
 		}
 		return data;
 	}
-
-	function changeData() {
-		var inputHoliday = notAcceptNull(parseInt($('#inputHoliday').val()));
-		var inputSaturday = notAcceptNull(parseInt($('#inputSaturday').val()));
-		var inputSunday = notAcceptNull(parseInt($('#inputSunday').val()));
-		$('#holiday').html(inputHoliday);
-		$('#saturday').html(inputSaturday);
-		$('#sunday').html(inputSunday);
-		$('#holiday7').html(inputHoliday + inputSaturday);
-		$('#holiday8').html(inputHoliday + inputSunday);
+	
+	function isNotNullNumbers(data) {
+		if (data == null || typeof data == "undefined" || isNaN(data)
+				|| data == "") {
+			return false;
+		}
+		return true;
+	}
+	
+	function notAcceptNullString(data) {
+		if (data == null || typeof data == "undefined" || data == "") {
+			return "";
+		}
+		return data;
 	}
 
-	function evtInput() {
-		changeData();
-		$('#result').hide();
+	function selectAdditionPayment(newId, selectedID) {
+		location.href = '${pageContext.request.contextPath}/vn/phu-thu/' + newId + '/' + selectedID + '.html';
 	}
-
-	function selectAdditionPayment0() {
-		var inputHoliday = notAcceptNull(parseInt($('#inputHoliday').val()));
-		location.href = '${pageContext.request.contextPath}/vn/phu-thu/ngay-le/'
-				+ inputHoliday + '/' + 0 + '.html';
-	}
-
-	function selectAdditionPayment1() {
-		var inputSaturday = notAcceptNull(parseInt($('#inputSaturday').val()));
-		location.href = '${pageContext.request.contextPath}/vn/phu-thu/thu-7/'
-				+ 0 + '/' + inputSaturday + '.html';
-	}
-
-	function selectAdditionPayment2() {
-		var inputSunday = notAcceptNull(parseInt($('#inputSunday').val()));
-		location.href = '${pageContext.request.contextPath}/vn/phu-thu/CN/'
-				+ 0 + '/' + inputSunday + '.html';
-	}
-
-	function selectAdditionPayment01() {
-		var inputHoliday = notAcceptNull(parseInt($('#inputHoliday').val()));
-		var inputSaturday = notAcceptNull(parseInt($('#inputSaturday').val()));
-		location.href = '${pageContext.request.contextPath}/vn/phu-thu/ngay-le7/'
-				+ inputHoliday + '/' + inputSaturday + '.html';
-	}
-
-	function selectAdditionPayment02() {
-		var inputHoliday = notAcceptNull(parseInt($('#inputHoliday').val()));
-		var inputSunday = notAcceptNull(parseInt($('#inputSunday').val()));
-		location.href = '${pageContext.request.contextPath}/vn/phu-thu/ngay-leCN/'
-				+ inputHoliday + '/' + inputSunday + '.html';
+	
+	function addNewAdditionPayment() {
+		let selectID = '${selectedID}';
+		let additionDetails = $('#additionDetailsInput').val();
+		let additionalVIPRoomPrice = notAcceptNullNumber($('#additionalVIPRoomPriceInput').val());
+		let additionalVIPHourPrice = notAcceptNullNumber($('#additionalVIPHourPriceInput').val());
+		let additionalVIPNightPrice = notAcceptNullNumber($('#additionalVIPNightPriceInput').val());
+		let additionalNormalRoomPrice = notAcceptNullNumber($('#additionalNormalRoomPriceInput').val());
+		let additionalNormalHourPrice = notAcceptNullNumber($('#additionalNormalHourPriceInput').val());
+		let additionalNormalNightPrice = notAcceptNullNumber($('#additionalNormalNightPriceInput').val());	
+		
+		if(notAcceptNullString(additionDetails) != "" ) {
+			additionDetails = additionDetails.replace('/', "-");
+			location.href='${pageContext.request.contextPath}/vn/ap-dung-moi/' + additionDetails + '/' + additionalVIPRoomPrice + '/' + additionalVIPHourPrice + '/' + additionalVIPNightPrice + '/' + additionalNormalRoomPrice + '/' + additionalNormalHourPrice + '/' + additionalNormalNightPrice + '/' + selectID + '.html';
+		}
+		
 	}
 
 	window.onload = function() { //first load page
-		var additionDetails = '${additionDetails}';
-		switch (additionDetails) {
-		case 'Ngày Lễ':
-			var additionPayment1 = '${additionPayment1}';
-			$('#inputHoliday').val(additionPayment1);
-			changeData();
-			break;
-		case 'Thứ Bảy':
-			var additionPayment2 = '${additionPayment2}';
-			$('#inputSaturday').val(additionPayment2);
-			changeData();
-			break;
-		case 'Chủ Nhật':
-			var additionPayment2 = '${additionPayment2}';
-			$('#inputSunday').val(additionPayment2);
-			changeData();
-			break;
-		case 'Ngày Lễ + Thứ Bảy':
-			var additionPayment1 = '${additionPayment1}';
-			var additionPayment2 = '${additionPayment2}';
-			$('#inputHoliday').val(additionPayment1);
-			$('#inputSaturday').val(additionPayment2);
-			changeData();
-			break;
-		case 'Ngày Lễ + Chủ Nhật':
-			var additionPayment1 = '${additionPayment1}';
-			var additionPayment2 = '${additionPayment2}';
-			$('#inputHoliday').val(additionPayment1);
-			$('#inputSunday').val(additionPayment2);
-			changeData();
-			break;
-		default:
-			$('#inputHoliday').val(0);
-			$('#inputSaturday').val(0);
-			$('#inputSunday').val(0);
-			changeData();
-		}
 	};
 </script>

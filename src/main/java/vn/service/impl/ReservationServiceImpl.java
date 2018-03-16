@@ -88,11 +88,21 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 	
 	public Reservation getReservationByHourRentalBill(HourRentalBill hourRentalBill, Reservation reservation) {
+		reservation.setCheckout(hourRentalBill.getCheckout());
 		reservation.setRoomPrice(hourRentalBill.getRoomPrice() + hourRentalBill.getHourPrice());
 		reservation.setTotalStayDuration(hourRentalBill.getStayDuration());
 		reservation.setAdditionPayment(hourRentalBill.getAdditionalRoomPrice() + hourRentalBill.getAdditionalHourPrice());
 		reservation.setTotalPayment(hourRentalBill.getFinalPayment());
 		return reservation;
+	}
+	
+	public Reservation getReservationByAdditionalPayment(Reservation reservation, AdditionalPayment additionalPayment) {
+		HotelRoom room = roomDAO.getRoomByName(reservation.getRoom());
+		String checkout = reservation.getCheckout();
+		if(checkout == null || checkout.equals("") || checkout.equalsIgnoreCase("null"))
+			checkout =  DateTimeCalculator.getStrDateTimeWithTNoSecondToday();
+		HourRentalBill hourRentalBill = getHourRentalBillForRoom(room.getName(), additionalPayment.getAdditionDetails(), reservation.getCheckin(), checkout, room.getPrice(), room.getHourPrice(), reservation.getServicePayment());
+		return getReservationByHourRentalBill(hourRentalBill, reservation);
 	}
 	
 	public HourRentalBill getHourRentalBillForReservation(Reservation reservation) {

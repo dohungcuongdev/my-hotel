@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,14 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import model.sql.hotel.HotelService;
-import statics.constant.AppData;
 import statics.helper.DateTimeCalculator;
-import vn.model.Reservation;
-import vn.service.HotelItemService;
-import vn.service.ReservationService;
 import vn.helper.VNCurrencyFormatter;
+import vn.model.AdditionalPayment;
 import vn.model.HotelRoom;
 import vn.model.MyHotelConst;
+import vn.model.Reservation;
+import vn.service.AdditionalPaymentService;
+import vn.service.HotelItemService;
+import vn.service.ReservationService;
 
 /**
  *
@@ -40,6 +40,9 @@ public class VNAppController {
 	
 	@Autowired
 	private HotelItemService hotelItemService;
+	
+	@Autowired
+	private AdditionalPaymentService additionalPaymentService;
 	
 	// don phong trong ngay 
 	@RequestMapping(value = { "don-phong-hom-nay", "donphonghomnay", "index" }, method = RequestMethod.GET)
@@ -68,6 +71,7 @@ public class VNAppController {
 	public String themlichdatphong(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		model.addAttribute("newReservation", new Reservation());
 		initializeRoomsWithType(model);
+		initializeAdditionalPayment(model);
 		return authInitializeRedirect(request, response, model, "them-lich-dat-phong");
 	}
 	
@@ -76,6 +80,7 @@ public class VNAppController {
 	public String sualichdatphong(@PathVariable(value = "id") int id, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		model.addAttribute("reservation", reservationService.getReservationByID(id));
 		initializeRoomsWithType(model);
+		initializeAdditionalPayment(model);
 		return authInitializeRedirect(request, response, model, "sua-lich-dat-phong");
 	}
 	
@@ -84,6 +89,7 @@ public class VNAppController {
 	public String traPhong(@PathVariable(value = "id") int id, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		model.addAttribute("newReservation", reservationService.getReservationByID(id));
 		initializeRoomsWithType(model);
+		initializeAdditionalPayment(model);
 		return authInitializeRedirect(request, response, model, "tra-phong");
 	}
 	
@@ -152,16 +158,32 @@ public class VNAppController {
 	// phu thu
 	@RequestMapping(value = { "phu-thu", "phuthu" }, method = RequestMethod.GET)
 	public String phuThu(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		initializeAdditionalPayment(model);
+		initializeAllAdditionalPayment(model);
 		return authInitializeRedirect(request, response, model, "phu-thu");
 	}
 	
-	@RequestMapping(value = { "phu-thu/{additionDetails}/{additionPayment1}/{additionPayment2}", "phuthu/{additionDetails}/{additionPayment1}/{additionPayment2}" }, method = RequestMethod.GET)
-	public String phuThu3Param(@ModelAttribute(value = "additionDetails") String additionDetails, @ModelAttribute(value = "additionPayment1") int additionPayment1, @ModelAttribute(value = "additionPayment2") int additionPayment2, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		MyHotelConst.additionDetails = additionDetails;
-    	MyHotelConst.additionPayment1 = additionPayment1;
-    	MyHotelConst.additionPayment2 = additionPayment2;
-    	initializeAdditionalPayment(model);
+	@RequestMapping(value = { "phu-thu/{newID}/{selectedID}", "phuthu/{newID}/{selectedID}" }, method = RequestMethod.GET)
+	public String phuThu2Param(@ModelAttribute(value = "newID") int newID, @ModelAttribute(value = "selectedID") int selectedID, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		additionalPaymentService.deSelectAdditionalPayment(selectedID);
+		additionalPaymentService.selectAdditionalPayment(newID);
+		initializeAllAdditionalPayment(model);
+		return authInitializeRedirect(request, response, model, "phu-thu");
+	}
+	
+	@RequestMapping(value = "ap-dung-moi/{additionDetails}/{additionalVIPRoomPrice}/{additionalVIPHourPrice}/{additionalVIPNightPrice}/{additionalNormalRoomPrice}/{additionalNormalHourPrice}/{additionalNormalNightPrice}/{selectedID}" , method = RequestMethod.GET)
+	public String apDungMoi(@ModelAttribute(value = "additionDetails") String additionDetails,
+							@ModelAttribute(value = "additionalVIPRoomPrice") int additionalVIPRoomPrice,
+							@ModelAttribute(value = "additionalVIPHourPrice") int additionalVIPHourPrice, 
+							@ModelAttribute(value = "additionalVIPNightPrice") int additionalVIPNightPrice, 
+							@ModelAttribute(value = "additionalNormalRoomPrice") int additionalNormalRoomPrice, 
+							@ModelAttribute(value = "additionalNormalHourPrice") int additionalNormalHourPrice, 
+							@ModelAttribute(value = "additionalNormalNightPrice") int additionalNormalNightPrice, 
+			                @ModelAttribute(value = "selectedID") int selectedID, 
+			                HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		
+		additionalPaymentService.deSelectAdditionalPayment(selectedID);
+		additionalPaymentService.findIDAndAddNewAdditionalPayment(additionDetails, additionalNormalRoomPrice, additionalVIPRoomPrice, additionalNormalHourPrice, additionalVIPHourPrice, additionalNormalNightPrice, additionalVIPNightPrice, true);
+		initializeAllAdditionalPayment(model);
 		return authInitializeRedirect(request, response, model, "phu-thu");
 	}
 	
@@ -187,15 +209,37 @@ public class VNAppController {
 	
 	
 	
-	
-	
 	private void initializeAdditionalPayment(ModelMap model) {
-		int totalAdditionalPayment = MyHotelConst.additionPayment1 + MyHotelConst.additionPayment2;
-	    model.put("additionDetails", MyHotelConst.wellDisplayAdditionDetails());
-		model.put("additionPayment1", MyHotelConst.additionPayment1);
-		model.put("additionPayment2", MyHotelConst.additionPayment2);
-		model.put("additionPayment", VNCurrencyFormatter.wellDisplayNumber(totalAdditionalPayment));
-		model.put("additionPaymentAlpha", VNCurrencyFormatter.numberToString(totalAdditionalPayment));
+		AdditionalPayment selectedAdditionalPayment = additionalPaymentService.getSelectedAdditionalPayment();
+		int additionalVIPRoomPrice = selectedAdditionalPayment.getAdditionalVIPRoomPrice();
+		int additionalVIPHourPrice = selectedAdditionalPayment.getAdditionalVIPHourPrice();
+		int additionalVIPNightPrice = selectedAdditionalPayment.getAdditionalVIPNightPrice();
+		int additionalNormalRoomPrice = selectedAdditionalPayment.getAdditionalNormalRoomPrice();
+		int additionalNormalHourPrice = selectedAdditionalPayment.getAdditionalNormalHourPrice();
+		int additionalNormalNightPrice = selectedAdditionalPayment.getAdditionalNormalNightPrice();		
+		
+		model.put("selectedID", selectedAdditionalPayment.getId());
+		model.put("additionDetails", selectedAdditionalPayment.getAdditionDetails());
+		
+		model.put("additionalVIPRoomPrice", VNCurrencyFormatter.wellDisplayNumber(additionalVIPRoomPrice));
+		model.put("additionalVIPHourPrice", VNCurrencyFormatter.wellDisplayNumber(additionalVIPHourPrice));
+		model.put("additionalVIPNightPrice", VNCurrencyFormatter.wellDisplayNumber(additionalVIPNightPrice));
+		model.put("additionalNormalRoomPrice", VNCurrencyFormatter.wellDisplayNumber(additionalNormalRoomPrice));
+		model.put("additionalNormalHourPrice", VNCurrencyFormatter.wellDisplayNumber(additionalNormalHourPrice));
+		model.put("additionalNormalNightPrice", VNCurrencyFormatter.wellDisplayNumber(additionalNormalNightPrice));
+
+		model.put("additionalVIPRoomPriceStr", VNCurrencyFormatter.numberToString(additionalVIPRoomPrice));
+		model.put("additionalVIPHourPriceStr", VNCurrencyFormatter.numberToString(additionalVIPHourPrice));
+		model.put("additionalVIPNightPriceStr", VNCurrencyFormatter.numberToString(additionalVIPNightPrice));
+		model.put("additionalNormalRoomPriceStr", VNCurrencyFormatter.numberToString(additionalNormalRoomPrice));
+		model.put("additionalNormalHourPriceStr", VNCurrencyFormatter.numberToString(additionalNormalHourPrice));
+		model.put("additionalNormalNightPriceStr", VNCurrencyFormatter.numberToString(additionalNormalNightPrice));
+	}
+	
+	private void initializeAllAdditionalPayment(ModelMap model) {
+		model.put("allAdditionalPayments", additionalPaymentService.getAllAdditionalPayments());
+		initializeAdditionalPayment(model);
+		
 	}
 	
 	

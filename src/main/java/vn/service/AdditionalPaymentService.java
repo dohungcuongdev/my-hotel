@@ -1,10 +1,10 @@
-package vn.daos;
+package vn.service;
 
 import java.util.List;
 
 import vn.model.AdditionalPayment;
 
-public interface AdditionalPaymentDAO {
+public interface AdditionalPaymentService {
 	public List<AdditionalPayment> getAllAdditionalPayments();
 	public AdditionalPayment getSingleAdditionalPayment(String additionDetails);
 	public void deSelectAdditionalPayment(int id);
@@ -15,4 +15,5 @@ public interface AdditionalPaymentDAO {
 	public int findIDAndAddNewAdditionalPayment(String additionDetails, int additionalNormalRoomPrice, int additionalVIPRoomPrice,
 			int additionalNormalHourPrice, int additionalVIPHourPrice, int additionalNormalNightPrice,
 			int additionalVIPNightPrice, boolean selected);
+
 }
