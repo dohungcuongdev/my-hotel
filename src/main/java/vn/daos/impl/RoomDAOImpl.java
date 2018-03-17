@@ -8,6 +8,7 @@ package vn.daos.impl;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -133,8 +134,10 @@ public class RoomDAOImpl extends HotelItemDAO<HotelRoom> implements RoomDAO {
     
     @Override
     public Map<String, String> getListRoomsWithType() {
-    	Map<String, String> listRoomsWithType = new HashMap<>();
-		DBCursor cursor = collection.find();
+    	Map<String, String> listRoomsWithType = new LinkedHashMap<>();
+    	 BasicDBObject sortQuery = new BasicDBObject();
+ 		sortQuery.put("id", 1);
+		DBCursor cursor = collection.find().sort(sortQuery);
 		while (cursor.hasNext()) {
 			DBObject obj = cursor.next();
 			HotelRoom room = fromJson3(obj, classOfT);

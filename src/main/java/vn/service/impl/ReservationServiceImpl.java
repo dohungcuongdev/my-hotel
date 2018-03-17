@@ -57,23 +57,30 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 
 	@Override
-	public void checkOutReservation(Reservation reservation) {
-		reservationDAO.checkOutReservation(reservation);
-		
+	public Reservation checkOutReservation(Reservation reservation) {
+    	if(reservation.isCorrectCheckoutInfor()) {
+    		reservation.initSomeInforToCheckOut();
+    		reservationDAO.checkOutReservation(reservation);
+    		return reservation;
+    	}
+    	return null;
 	}
 
 	@Override
 	public void editReservationInfor(Reservation reservation) {
+		reservation.initSomeInforToUpdate();
 		reservationDAO.editReservationInfor(reservation);
 	}
 
 	@Override
 	public Reservation findAndAddNewReservation(Reservation reservation) {
+		reservation.initSomeInforToAddNew();
 		return reservationDAO.findAndAddNewReservation(reservation);
 	}
 
 	@Override
 	public Reservation findAnUpdateReservation(Reservation reservation) {
+		reservation.initSomeInforToUpdate();
 		return reservationDAO.findAnUpdateReservation(reservation);
 	}
 
@@ -89,13 +96,15 @@ public class ReservationServiceImpl implements ReservationService {
 	
 	public Reservation getReservationByHourRentalBill(HourRentalBill hourRentalBill, Reservation reservation) {
 		reservation.setCheckout(hourRentalBill.getCheckout());
-		reservation.setRoomPrice(hourRentalBill.getRoomPrice() + hourRentalBill.getHourPrice());
+		reservation.setRoomPrice(hourRentalBill.getTotalRoomPrice());
 		reservation.setTotalStayDuration(hourRentalBill.getStayDuration());
-		reservation.setAdditionPayment(hourRentalBill.getAdditionalRoomPrice() + hourRentalBill.getAdditionalHourPrice());
+		reservation.setAdditionDetails(hourRentalBill.getAdditionDetails());
+		reservation.setAdditionPayment(hourRentalBill.getTotaladditional());
 		reservation.setTotalPayment(hourRentalBill.getFinalPayment());
 		return reservation;
 	}
 	
+	@Override
 	public Reservation getReservationByAdditionalPayment(Reservation reservation, AdditionalPayment additionalPayment) {
 		HotelRoom room = roomDAO.getRoomByName(reservation.getRoom());
 		String checkout = reservation.getCheckout();
@@ -129,35 +138,41 @@ public class ReservationServiceImpl implements ReservationService {
 	
 	public HourRentalBill getHourRentalBillNormalRoom(String additionDetails, String checkin, String checkout, int roomPrice, int hourPrice, int servicePayment) {
 		if(additionDetails == null || additionDetails.equals(""))
-			return getHourRentalBill(checkin, checkout, roomPrice, hourPrice, 0, 0, servicePayment);
+			return getHourRentalBill(checkin, checkout, roomPrice, hourPrice, "Không Phụ Thu", 0, 0, servicePayment);
 		AdditionalPayment additionalPayment = additionalPaymentDAO.getSingleAdditionalPayment(additionDetails);
 		int additionalRoomPrice = additionalPayment.getAdditionalNormalRoomPrice();
 		int additionalHourPrice = additionalPayment.getAdditionalNormalHourPrice();
-		return getHourRentalBill(checkin, checkout, roomPrice, hourPrice, additionalRoomPrice, additionalHourPrice, servicePayment);
+		return getHourRentalBill(checkin, checkout, roomPrice, hourPrice, additionDetails, additionalRoomPrice, additionalHourPrice, servicePayment);
 	}
 	
 	public HourRentalBill getHourRentalBillVIPRoom(String additionDetails, String checkin, String checkout, int roomPrice, int hourPrice, int servicePayment) {
 		if(additionDetails == null || additionDetails.equals(""))
-			return getHourRentalBill(checkin, checkout, roomPrice, hourPrice, 0, 0, servicePayment);
+			return getHourRentalBill(checkin, checkout, roomPrice, hourPrice, "Không Phụ Thu", 0, 0, servicePayment);
 		AdditionalPayment additionalPayment = additionalPaymentDAO.getSingleAdditionalPayment(additionDetails);
 		int additionalRoomPrice = additionalPayment.getAdditionalVIPRoomPrice();
 		int additionalHourPrice = additionalPayment.getAdditionalVIPHourPrice();
-		return getHourRentalBill(checkin, checkout, roomPrice, hourPrice, additionalRoomPrice, additionalHourPrice, servicePayment);
+		return getHourRentalBill(checkin, checkout, roomPrice, hourPrice, additionDetails, additionalRoomPrice, additionalHourPrice, servicePayment);
 	}
 	
-	public HourRentalBill getHourRentalBill(String checkin, String checkout, int roomPrice, int hourPrice, int additionalRoomPrice, int additionalHourPrice, int servicePayment) {
+	public HourRentalBill getHourRentalBill(String checkin, String checkout, int roomPrice, int hourPrice, String additionDetails, int additionalRoomPrice, int additionalHourPrice, int servicePayment) {
 		int finalPayment = 0;
+		int totalRoomPrice = 0;
+		int totaladditional = 0;
 		Date from = DateTimeCalculator.getICTDateTimeNoSecond(checkin);
 		Date to = DateTimeCalculator.getICTDateTimeNoSecond(checkout);
 		long stayDurationMilli = to.getTime() - from.getTime();
 		int stayDurationHour = (int) DateTimeCalculator.millToHourUp(stayDurationMilli);
 		String stayDuration = DateTimeCalculator.convertSecondsToHMmSs(stayDurationMilli);
 		if(stayDurationHour <= 2) {
+			totalRoomPrice = roomPrice;
+			totaladditional = additionalRoomPrice;
 			finalPayment = roomPrice + servicePayment + additionalRoomPrice;
 		} else {
+			totalRoomPrice = roomPrice + hourPrice*(stayDurationHour-2);
+			totaladditional = additionalRoomPrice + additionalHourPrice*(stayDurationHour-2);
 			finalPayment = roomPrice + servicePayment + additionalRoomPrice + hourPrice*(stayDurationHour-2) + additionalHourPrice*(stayDurationHour-2);
 		}
-		return new HourRentalBill(checkin, checkout, stayDurationMilli, stayDuration, stayDurationHour, roomPrice, hourPrice, additionalRoomPrice, additionalHourPrice, servicePayment, finalPayment);
+		return new HourRentalBill(checkin, checkout, stayDurationMilli, stayDuration, stayDurationHour, roomPrice, hourPrice, totalRoomPrice, additionDetails, additionalRoomPrice, additionalHourPrice, totaladditional, servicePayment, finalPayment);
 	}
 
 }

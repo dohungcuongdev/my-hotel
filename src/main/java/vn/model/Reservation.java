@@ -1,14 +1,19 @@
 package vn.model;
 
 import java.util.Comparator;
+import java.util.Date;
 
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBObject;
 
-import vn.daos.impl.RoomDAOImpl;
+import model.AbstractModel;
+import statics.helper.DateTimeCalculator;
+import vn.daos.ReservationDAO;
 import vn.daos.RoomDAO;
+import vn.daos.impl.ReservationDAOImpl;
+import vn.daos.impl.RoomDAOImpl;
 
-public class Reservation {
+public class Reservation extends AbstractModel {
 	private int id;
 	private String guest;  // khách hàng
 	private String rental; // thuê giờ - qua đêm
@@ -31,8 +36,8 @@ public class Reservation {
 	private String last_modify_at;  // lần cuối cùng sửa lúc
 	private String listModifyDate;
 	private String listModifyUser;
-	
-	private RoomDAO roomDAO = new RoomDAOImpl();
+	private boolean unusual; // có bình thường hay ko (không bt là khi tiền thu khác so với hệ thống tính toán)
+	private String billAt; // xuất hóa đơn lúc
 
 	public int getId() {
 		return id;
@@ -198,7 +203,99 @@ public class Reservation {
 		this.last_modify_at = last_modify_at;
 	}
 
+	public String getListModifyDate() {
+		return listModifyDate;
+	}
+
+	public void setListModifyDate(String listModifyDate) {
+		this.listModifyDate = listModifyDate;
+	}
+
+	public String getListModifyUser() {
+		return listModifyUser;
+	}
+
+	public void setListModifyUser(String listModifyUser) {
+		this.listModifyUser = listModifyUser;
+	}
+	
+	public boolean isHackerAccess() {
+		ReservationDAO reservationDAO = new ReservationDAOImpl();
+		Reservation oldVersionReservation = reservationDAO.getReservationByID(id);
+		if(oldVersionReservation != null) {
+			if(oldVersionReservation.created_by != this.created_by)
+				return true;
+			if(oldVersionReservation.created_at != this.created_at)
+				return true;
+			String lastPersonAccess = this.listModifyUser.substring(this.listModifyUser.lastIndexOf(',') + 1);
+			if(!((oldVersionReservation.listModifyUser).equals(this.listModifyUser)))
+				return true;
+			String lastDateAccess = this.listModifyDate.substring(this.listModifyDate.lastIndexOf(',') + 1);
+			if(!((oldVersionReservation.listModifyDate).equals(this.listModifyDate)))
+				return true;
+			return false;
+		}
+		return true;
+	}
+	
+	public String getUserWasHacked() {
+		if(isHackerAccess()) {
+			return MyHotelConst.user.getUsername();
+		}
+		return null;
+	}
+	
+	public void initSomeInforToAddNew() {
+    	if(hasNoValue(checkin)) {
+    		setCheckin(DateTimeCalculator.getStrDateTimeWithTNoSecondToday());
+    	}
+    	setStatus("Khách đang ở");
+		String dateTimeToday = DateTimeCalculator.getStrDateTimeVNToday();
+		setCreated_at(dateTimeToday);
+		setLast_modify_at(dateTimeToday);
+		setCreated_by(MyHotelConst.user.getName());
+		setLast_modify_by(MyHotelConst.user.getName());
+		setListModifyDate(dateTimeToday);
+		setListModifyUser(MyHotelConst.user.getName());
+	}
+	
+	public void initSomeInforToUpdate() {
+    	if(hasNoValue(checkin)) {
+    		setCheckin(DateTimeCalculator.getStrDateTimeWithTNoSecondToday());
+    	}
+		String dateTimeToday = DateTimeCalculator.getStrDateTimeVNToday();
+		setLast_modify_at(dateTimeToday);
+		setLast_modify_by(MyHotelConst.user.getName());
+		setListModifyDate(this.listModifyDate + ", " + dateTimeToday);
+		setListModifyUser(this.listModifyUser + ", " + MyHotelConst.user.getName());
+	}
+	
+	public boolean isCorrectCheckoutInfor() {
+		RoomDAO roomDAO = new RoomDAOImpl();
+		Date from = DateTimeCalculator.getICTDateTimeNoSecond(checkin);
+		Date to = DateTimeCalculator.getICTDateTimeNoSecond(checkout);
+		long stayDurationMilli = to.getTime() - from.getTime();
+		int stayDurationHour = (int) DateTimeCalculator.millToHourUp(stayDurationMilli);
+		if(!checkNaturalNumberAccept0(roomPrice, servicePayment, additionPayment, totalPayment))
+			return false;
+		if(!checkNaturalNumber(stayDurationHour))
+			return false;
+		if(totalPayment != roomPrice + servicePayment + additionPayment) 
+			return false;
+    	return (roomDAO.getRoomByName(room) != null);
+    		
+	}
+	
+	public void initSomeInforToCheckOut() {
+    	setStatus("Đã thanh toán");
+    	if(hasNoValue(checkout)) {
+    		setCheckout(DateTimeCalculator.getStrDateTimeWithTNoSecondToday());
+    	}
+    	initSomeInforToUpdate();
+	}
+
 	public String getAutoGenColorClassRoom() {
+		RoomDAO roomDAO = new RoomDAOImpl();
 		switch (roomDAO.getTypeByRoom(room)) {
 		case "VIP":
 			return "label label-danger";
@@ -210,7 +307,11 @@ public class Reservation {
 
 	public boolean hasNoValue(Object o) {
     	return (o == null || o.equals("") || o.toString().trim().equals(""));
-    }   
+    }
+	
+	public void simpleComputeTotalPayment() {
+		this.totalPayment = this.roomPrice + this.servicePayment + this.additionPayment;
+	}
 	
 	public static class CompareDateTime implements Comparator<Reservation> {
 		@Override
@@ -251,7 +352,11 @@ public class Reservation {
 		return "Reservation [id=" + id + ", guest=" + guest + ", rental=" + rental + ", room=" + room + ", roomPrice="
 				+ roomPrice + ", cMND=" + cMND + ", note=" + note + ", service=" + service + ", servicePayment="
 				+ servicePayment + ", checkin=" + checkin + ", checkout=" + checkout + ", totalStayDuration="
-				+ totalStayDuration + ", additionPayment=" + additionPayment + ", totalPayment=" + totalPayment + "]";
+				+ totalStayDuration + ", additionDetails=" + additionDetails + ", additionPayment=" + additionPayment
+				+ ", totalPayment=" + totalPayment + ", status=" + status + ", created_by=" + created_by
+				+ ", created_at=" + created_at + ", last_modify_by=" + last_modify_by + ", last_modify_at="
+				+ last_modify_at + ", listModifyDate=" + listModifyDate + ", listModifyUser=" + listModifyUser
+				+ "]";
 	}
 
 }

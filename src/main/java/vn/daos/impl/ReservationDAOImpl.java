@@ -109,10 +109,6 @@ public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO 
 
 	@Override
 	public Reservation findAndAddNewReservation(Reservation reservation) {
-    	if(reservation.hasNoValue(reservation.getCheckin())) {
-    		reservation.setCheckin(new Date().toString());
-    	}
-    	reservation.setStatus("Khách đang ở");
 		BasicDBObject sortQuery = new BasicDBObject();
 		sortQuery.put("checkin", -1);
 		DBCursor cursor = collection.find().sort(sortQuery).limit(1);
@@ -124,16 +120,6 @@ public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO 
     
 	@Override
     public void checkOutReservation(Reservation reservation) {
-    	if(reservation.hasNoValue(reservation.getCheckout())) {
-    		reservation.setCheckout(new Date().toString());
-    	}
-    	if(reservation.hasNoValue(reservation.getTotalStayDuration())) {
-    		//Date 1 - Date 2
-    	}
-    	if(reservation.hasNoValue(reservation.getTotalPayment())) {
-    		
-    	}
-    	reservation.setStatus("Đã thanh toán");
     	editReservationInfor(reservation);
     }
     

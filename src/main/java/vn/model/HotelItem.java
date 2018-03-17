@@ -134,6 +134,37 @@ public abstract class HotelItem {
 	public HotelItem() {
 	}
 
+	public HotelItem(int id, String name, String type, int price, String img, String img2, String details,
+			String created_by, String created_at, String last_modify_by, String last_modify_at) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.type = type;
+		this.price = price;
+		this.img = img;
+		this.img2 = img2;
+		this.details = details;
+		this.created_by = created_by;
+		this.created_at = created_at;
+		this.last_modify_by = last_modify_by;
+		this.last_modify_at = last_modify_at;
+	}
+
+	public HotelItem(String name, String type, int price, String img, String img2, String details, String created_by,
+			String created_at, String last_modify_by, String last_modify_at) {
+		super();
+		this.name = name;
+		this.type = type;
+		this.price = price;
+		this.img = img;
+		this.img2 = img2;
+		this.details = details;
+		this.created_by = created_by;
+		this.created_at = created_at;
+		this.last_modify_by = last_modify_by;
+		this.last_modify_at = last_modify_at;
+	}
+
 	@Override
 	public String toString() {
 		return "HotelItem [price=" + price + ", img=" + img + ", img2=" + img2 + ", details=" + details + ", type="

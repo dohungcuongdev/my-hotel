@@ -28,7 +28,7 @@
         <div class="sm-st clearfix">
             <span class="sm-st-icon st-green"><i class="fa fa fa-money"></i></span>
             <div class="sm-st-info">
-                <span>${totalServices}</span> Phụ thu hôm nay
+                <span>Không</span> Phụ thu hôm nay
             </div>
         </div>
     </div>

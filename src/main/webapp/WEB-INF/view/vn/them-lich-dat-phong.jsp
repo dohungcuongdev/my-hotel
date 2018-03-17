@@ -44,14 +44,6 @@
 						</form:select>
 					</div>
 					<div class="form-group">
-						<label>Tổng Gía phòng</label>
-					</div>
-					<div class="form-group">
-						<form:input type="number" class="form-control"
-							placeholder="Giá phòng" path="roomPrice"
-							onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
-					</div>
-					<div class="form-group">
 						<label>Giờ vào</label>
 					</div>
 					<div class="form-group">

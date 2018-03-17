@@ -80,6 +80,7 @@ public class HotelRoom extends HotelItem {
 				.append("type", type)
 				.append("size", size)
 				.append("price", price)
+				.append("hourPrice", hourPrice)
 				.append("overnightPrice", overnightPrice)
 				.append("numpeople", numpeople)
 				.append("status", status)
@@ -92,5 +93,29 @@ public class HotelRoom extends HotelItem {
 				.append("last_modify_by", last_modify_by)
 				.append("last_modify_at", last_modify_at)
 				.get();
+	}
+
+	public HotelRoom(int id, String name, String type, int price, String img, String img2, String details,
+			String created_by, String created_at, String last_modify_by, String last_modify_at, int size, String status,
+			int numpeople, String amenities, int hourPrice, int overnightPrice) {
+		super(id, name, type, price, img, img2, details, created_by, created_at, last_modify_by, last_modify_at);
+		this.size = size;
+		this.status = status;
+		this.numpeople = numpeople;
+		this.amenities = amenities;
+		this.hourPrice = hourPrice;
+		this.overnightPrice = overnightPrice;
+	}
+
+	public HotelRoom(String name, String type, int price, String img, String img2, String details, String created_by,
+			String created_at, String last_modify_by, String last_modify_at, int size, String status, int numpeople,
+			String amenities, int hourPrice, int overnightPrice) {
+		super(name, type, price, img, img2, details, created_by, created_at, last_modify_by, last_modify_at);
+		this.size = size;
+		this.status = status;
+		this.numpeople = numpeople;
+		this.amenities = amenities;
+		this.hourPrice = hourPrice;
+		this.overnightPrice = overnightPrice;
 	}
 }

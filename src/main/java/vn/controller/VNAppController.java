@@ -87,9 +87,33 @@ public class VNAppController {
 	// tra phong
 	@RequestMapping(value = { "tra-phong/{id}", "traphong/{id}" }, method = RequestMethod.GET)
 	public String traPhong(@PathVariable(value = "id") int id, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-		model.addAttribute("newReservation", reservationService.getReservationByID(id));
+		
 		initializeRoomsWithType(model);
-		initializeAdditionalPayment(model);
+		AdditionalPayment selectedAdditionalPayment = additionalPaymentService.getSelectedAdditionalPayment();
+		Reservation reservation = reservationService.getReservationByID(id);
+		reservation = reservationService.getReservationByAdditionalPayment(reservation, selectedAdditionalPayment);
+		model.addAttribute("reservation", reservation);
+		return authInitializeRedirect(request, response, model, "tra-phong");
+	}
+	
+	// Tính lại đon phòng
+	@RequestMapping(value = { "tinh-lai-don-phong", "tinhlaidonphong" }, method = RequestMethod.POST)
+	public String tinhLaiDonPhong(@ModelAttribute(value = "reservation") Reservation reservation, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		initializeRoomsWithType(model);
+		reservation.simpleComputeTotalPayment();
+		model.addAttribute("reservation", reservation);
+		return authInitializeRedirect(request, response, model, "tra-phong");
+	}
+	
+	// luu-xuat-hoa-don
+	@RequestMapping(value = { "luu-xuat-hoa-don", "luuxuathoadon" }, method = RequestMethod.POST)
+	public String luuXuatHoaDon(@ModelAttribute(value = "reservation") Reservation reservation, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+		initializeRoomsWithType(model);
+		Reservation checkedout = reservationService.checkOutReservation(reservation);
+		if(checkedout != null)
+			model.addAttribute("reservation", checkedout);
+		else
+		    model.addAttribute("reservation", reservation);
 		return authInitializeRedirect(request, response, model, "tra-phong");
 	}
 	

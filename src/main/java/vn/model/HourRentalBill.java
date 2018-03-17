@@ -9,10 +9,13 @@ public class HourRentalBill {
 	private int stayDurationHour; // thời gian ở làm tròn theo giờ lố 10p tính giờ tiếp theo
 	private int roomPrice; // giá phòng
 	private int hourPrice; // giá phòng theo giờ
+	private int totalRoomPrice; // giá phòng + giá phòng theo giờ
+	private String additionDetails; // phụ thu
 	private int additionalRoomPrice; // phụ thu thêm tiền giá phòng
 	private int additionalHourPrice; // phụ thu giá phòng theo giờ
+	private int totaladditional; // tổng phụ thu = phụ thu thêm tiền giá phòng + phụ thu giá phòng theo giờ
 	private int servicePayment; // tiền dịch vụ
-	private int finalPayment; //tiền phải thanh toán
+	private int finalPayment; // tiền phải thanh toán
 
 	public String getCheckin() {
 		return checkin;
@@ -70,6 +73,14 @@ public class HourRentalBill {
 		this.hourPrice = hourPrice;
 	}
 
+	public String getAdditionDetails() {
+		return additionDetails;
+	}
+
+	public void setAdditionDetails(String additionDetails) {
+		this.additionDetails = additionDetails;
+	}
+
 	public int getAdditionalRoomPrice() {
 		return additionalRoomPrice;
 	}
@@ -94,6 +105,22 @@ public class HourRentalBill {
 		this.servicePayment = servicePayment;
 	}
 
+	public int getTotalRoomPrice() {
+		return totalRoomPrice;
+	}
+
+	public void setTotalRoomPrice(int totalRoomPrice) {
+		this.totalRoomPrice = totalRoomPrice;
+	}
+
+	public int getTotaladditional() {
+		return totaladditional;
+	}
+
+	public void setTotaladditional(int totaladditional) {
+		this.totaladditional = totaladditional;
+	}
+
 	public int getFinalPayment() {
 		return finalPayment;
 	}
@@ -102,9 +129,14 @@ public class HourRentalBill {
 		this.finalPayment = finalPayment;
 	}
 
+	public HourRentalBill() {
+		super();
+	}
+
 	public HourRentalBill(String checkin, String checkout, long stayDurationMilli, String stayDuration,
-			int stayDurationHour, int roomPrice, int hourPrice, int additionalRoomPrice, int additionalHourPrice,
-			int servicePayment, int finalPayment) {
+			int stayDurationHour, int roomPrice, int hourPrice, int totalRoomPrice, String additionDetails,
+			int additionalRoomPrice, int additionalHourPrice, int totaladditional, int servicePayment,
+			int finalPayment) {
 		super();
 		this.checkin = checkin;
 		this.checkout = checkout;
@@ -113,8 +145,11 @@ public class HourRentalBill {
 		this.stayDurationHour = stayDurationHour;
 		this.roomPrice = roomPrice;
 		this.hourPrice = hourPrice;
+		this.totalRoomPrice = totalRoomPrice;
+		this.additionDetails = additionDetails;
 		this.additionalRoomPrice = additionalRoomPrice;
 		this.additionalHourPrice = additionalHourPrice;
+		this.totaladditional = totaladditional;
 		this.servicePayment = servicePayment;
 		this.finalPayment = finalPayment;
 	}
@@ -123,8 +158,10 @@ public class HourRentalBill {
 	public String toString() {
 		return "HourRentalBill [checkin=" + checkin + ", checkout=" + checkout + ", stayDurationMilli="
 				+ stayDurationMilli + ", stayDuration=" + stayDuration + ", stayDurationHour=" + stayDurationHour
-				+ ", roomPrice=" + roomPrice + ", hourPrice=" + hourPrice + ", additionalRoomPrice="
-				+ additionalRoomPrice + ", additionalHourPrice=" + additionalHourPrice + ", servicePayment="
-				+ servicePayment + ", finalPayment=" + finalPayment + "]";
+				+ ", roomPrice=" + roomPrice + ", hourPrice=" + hourPrice + ", totalRoomPrice=" + totalRoomPrice
+				+ ", additionDetails=" + additionDetails + ", additionalRoomPrice=" + additionalRoomPrice
+				+ ", additionalHourPrice=" + additionalHourPrice + ", totaladditional=" + totaladditional
+				+ ", servicePayment=" + servicePayment + ", finalPayment=" + finalPayment + "]";
 	}
+
 }

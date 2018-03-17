@@ -57,6 +57,26 @@ public abstract class AbstractModel {
 		}
 		return true;
 	}
+	
+	protected boolean checkNaturalNumberAccept0(int num) {
+		try {
+			if (num < 0) {
+				return false;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+	
+	protected boolean checkNaturalNumberAccept0(int... numbers) {
+		for (int num : numbers) {
+			if (!checkNaturalNumberAccept0(num)) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	protected boolean checkNaturalNumber(String... strings) {
 		for (String str : strings) {

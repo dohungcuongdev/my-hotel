@@ -5,7 +5,8 @@
         <section class="panel">
             <header class="panel-heading" style="font-weight: bold; color:red">Trả phòng</header>
             <div class="panel-body">
-                <form:form method="post" onsubmit="return checkReservationForm()" commandName="newReservation" action="${pageContext.request.contextPath}/room-added.html">
+                <form:form method="post" commandName="reservation" action="" id="reservationform">
+                    <form:input required="true" type="hidden" id="id" path="id"/>
                     <div class="form-group">
                         <label>Tên Khách Hàng</label>
                     </div>
@@ -59,7 +60,7 @@
                         <label>Tổng Gía phòng</label>
                     </div>
                     <div class="form-group">
-                        <form:textarea type="text" class="form-control" path="note" placeholder="Ghi chú" rows="4"/>
+                        <form:textarea type="text" class="form-control" path="roomPrice" placeholder="Ghi chú" rows="4"/>
                     </div>
                     <div class="form-group">
                         <label>Ghi Chú</label>
@@ -98,8 +99,9 @@
                         <form:input type="number" class="form-control" placeholder="Tổng tiền phải thanh toán" path="totalPayment" onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
                     </div>
                     <p class="help-block">Điền thông tin để tiếp tục quá trình</p>
-                    <button style="margin-top: 3.5px" type="submit" class="btn btn-info">Submit</button>
-                    <button style="margin-top: 3.5px" onclick="location.href = '${pageContext.request.contextPath}/edit-room/${room.name}.html'" type="reset" class="btn btn-danger">Cancel</button>
+                    <button style="margin-top: 3.5px" onclick="return checkReservationForm('save')"  type="submit" class="btn btn-info">Lưu và xuất hóa đơn</button>
+                    <button style="margin-top: 3.5px" onclick="return checkReservationForm('compute')"  type="submit" class="btn btn-success">Tính lại đơn phòng</button>
+                    <button style="margin-top: 3.5px" onclick="location.href = '${pageContext.request.contextPath}/vn/tra-phong/${reservation.id}.html'" type="reset" class="btn btn-danger">Hủy</button>
                 </form:form>
             </div>
         </section>
@@ -107,42 +109,23 @@
 </div>
 <%@ include file="common/footer.jspf"%>
 <script type="text/javascript">
-function checkReservationForm() {
+function checkReservationForm(action) {
 /* 	$('#guest').css("border", "2px solid red");
 	return false; */
+	
+	if(action == 'save')
+		$("#reservationform").attr("action", '${pageContext.request.contextPath}/vn/luu-xuat-hoa-don.html');
+	if(action == 'compute')
+		$("#reservationform").attr("action", '${pageContext.request.contextPath}/vn/tinh-lai-don-phong.html');
+	
+	//return false;
 }
 
 window.onload = function () { //first load page
 	var isoStr = new Date().addHours(7).toISOString();
 	$('#checkout').val(isoStr.substring(0, isoStr.length - 8));
-	$("#rental").val('${newReservation.rental}');
-	$("#room").val('${newReservation.room}');
-	
-	let room = $('#room').val();
-	
-	//ngày thường
-	if(rental == 'hour') {
-		if(room == '101') { //vip
-			$('#roomPrice').val('100')
-		} else {            //thường
-			$('#roomPrice').val('')
-		}
-		//tiếng tiếp theo 30
-	}
-	
-	if(rental == 'night') {
-		// 9 tối - 9 sáng 200k
-		// 
-		if(room == '101') {
-			$('#roomPrice').val('')
-		}
-	}
-	
-	// vip 220
-	
-
-	
-	
+	$("#rental").val('${reservation.rental}');
+	$("#room").val('${reservation.room}');
 };
 
 Date.prototype.addHours = function(h) {
