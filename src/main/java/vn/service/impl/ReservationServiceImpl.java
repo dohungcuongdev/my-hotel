@@ -59,7 +59,6 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public Reservation checkOutReservation(Reservation reservation) {
     	if(reservation.isCorrectCheckoutInfor()) {
-    		reservation.initSomeInforToCheckOut();
     		reservationDAO.checkOutReservation(reservation);
     		return reservation;
     	}
@@ -68,7 +67,6 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public void editReservationInfor(Reservation reservation) {
-		reservation.initSomeInforToUpdate();
 		reservationDAO.editReservationInfor(reservation);
 	}
 
@@ -80,7 +78,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public Reservation findAnUpdateReservation(Reservation reservation) {
-		reservation.initSomeInforToUpdate();
+		//reservation.initSomeInforToUpdate();
 		return reservationDAO.findAnUpdateReservation(reservation);
 	}
 

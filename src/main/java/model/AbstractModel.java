@@ -17,7 +17,7 @@ import statics.helper.DateTimeCalculator;
 
 public abstract class AbstractModel {
 	
-	protected boolean checkNotNull(Object... objs) {
+	public boolean checkNotNull(Object... objs) {
 		for (Object obj : objs) {
 			if (obj == null || obj.toString().equals("")) {
 				return false;
@@ -26,7 +26,7 @@ public abstract class AbstractModel {
 		return true;
 	}
 	
-	protected boolean checkNaturalNumber(int num) {
+	public boolean checkNaturalNumber(int num) {
 		try {
 			if (num <= 0) {
 				return false;
@@ -37,7 +37,7 @@ public abstract class AbstractModel {
 		return true;
 	}
 
-	protected boolean checkNaturalNumber(String str) {
+	public boolean checkNaturalNumber(String str) {
 		try {
 			int num = Integer.parseInt(str);
 			if (num <= 0) {
@@ -49,7 +49,7 @@ public abstract class AbstractModel {
 		return true;
 	}
 	
-	protected boolean checkNaturalNumber(int... numbers) {
+	public boolean checkNaturalNumber(int... numbers) {
 		for (int num : numbers) {
 			if (!checkNaturalNumber(num)) {
 				return false;
@@ -58,7 +58,7 @@ public abstract class AbstractModel {
 		return true;
 	}
 	
-	protected boolean checkNaturalNumberAccept0(int num) {
+	public boolean checkNaturalNumberAccept0(int num) {
 		try {
 			if (num < 0) {
 				return false;
@@ -69,7 +69,7 @@ public abstract class AbstractModel {
 		return true;
 	}
 	
-	protected boolean checkNaturalNumberAccept0(int... numbers) {
+	public boolean checkNaturalNumberAccept0(int... numbers) {
 		for (int num : numbers) {
 			if (!checkNaturalNumberAccept0(num)) {
 				return false;
@@ -78,7 +78,7 @@ public abstract class AbstractModel {
 		return true;
 	}
 
-	protected boolean checkNaturalNumber(String... strings) {
+	public boolean checkNaturalNumber(String... strings) {
 		for (String str : strings) {
 			if (!checkNaturalNumber(str)) {
 				return false;
@@ -87,7 +87,7 @@ public abstract class AbstractModel {
 		return true;
 	}
 	
-	protected boolean checkIsDateTimeFormat(String strDate) {
+	public boolean checkIsDateTimeFormat(String strDate) {
 		try {
 			getDateFormated(strDate);
 			return true;
@@ -96,7 +96,7 @@ public abstract class AbstractModel {
 		}
 	}
 	
-	protected boolean checkIsDateFormat(String... strDates) {
+	public boolean checkIsDateFormat(String... strDates) {
 		for (String strDate : strDates) {
 			if (!checkIsDateTimeFormat(strDate)) {
 				return false;

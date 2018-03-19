@@ -17,15 +17,15 @@ public class Reservation extends AbstractModel {
 	private int id;
 	private String guest;  // khách hàng
 	private String rental; // thuê giờ - qua đêm
-	private String room;   // phòng
-	private int roomPrice; //giá phòng
 	private String cMND;   // giấy tờ tùy thân (CMND - giấy tờ xe ...)
-	private String note;   // ghi chú (phòng này thu tiền đặc biệt - phòng này cần phụ thu thêm ...)
-	private String service;     // dịch vụ ( mì xào bò x2 , cocacola x 3 ... )
-	private int servicePayment; // tổng tiền dịch vụ
+	private String room;   // phòng
 	private String checkin; //giờ vào
 	private String checkout; //giờ ra
 	private String totalStayDuration; // tổng thời gian ở trong phòng
+	private int roomPrice; //giá phòng
+	private String note;   // ghi chú (phòng này thu tiền đặc biệt - phòng này cần phụ thu thêm ...)
+	private String service;     // dịch vụ ( mì xào bò x2 , cocacola x 3 ... )
+	private int servicePayment; // tổng tiền dịch vụ
 	private String additionDetails;  // phụ thu
 	private int additionPayment; // tiền phụ thu
 	private int totalPayment; // tổng tiền phải trả
@@ -228,9 +228,11 @@ public class Reservation extends AbstractModel {
 			if(oldVersionReservation.created_at != this.created_at)
 				return true;
 			String lastPersonAccess = this.listModifyUser.substring(this.listModifyUser.lastIndexOf(',') + 1);
+			System.out.println(lastPersonAccess);
 			if(!((oldVersionReservation.listModifyUser).equals(this.listModifyUser)))
 				return true;
 			String lastDateAccess = this.listModifyDate.substring(this.listModifyDate.lastIndexOf(',') + 1);
+			System.out.println(lastDateAccess);
 			if(!((oldVersionReservation.listModifyDate).equals(this.listModifyDate)))
 				return true;
 			return false;
@@ -259,17 +261,6 @@ public class Reservation extends AbstractModel {
 		setListModifyUser(MyHotelConst.user.getName());
 	}
 	
-	public void initSomeInforToUpdate() {
-    	if(hasNoValue(checkin)) {
-    		setCheckin(DateTimeCalculator.getStrDateTimeWithTNoSecondToday());
-    	}
-		String dateTimeToday = DateTimeCalculator.getStrDateTimeVNToday();
-		setLast_modify_at(dateTimeToday);
-		setLast_modify_by(MyHotelConst.user.getName());
-		setListModifyDate(this.listModifyDate + ", " + dateTimeToday);
-		setListModifyUser(this.listModifyUser + ", " + MyHotelConst.user.getName());
-	}
-	
 	public boolean isCorrectCheckoutInfor() {
 		RoomDAO roomDAO = new RoomDAOImpl();
 		Date from = DateTimeCalculator.getICTDateTimeNoSecond(checkin);
@@ -291,7 +282,7 @@ public class Reservation extends AbstractModel {
     	if(hasNoValue(checkout)) {
     		setCheckout(DateTimeCalculator.getStrDateTimeWithTNoSecondToday());
     	}
-    	initSomeInforToUpdate();
+    	//initSomeInforToUpdate();
 	}
 
 	public String getAutoGenColorClassRoom() {
@@ -321,8 +312,34 @@ public class Reservation extends AbstractModel {
 		}
     }
 	
-	//use for old DAOs: mongodb DAOs
+	// for official Reservation
 	public DBObject toDBObject() {
+		return BasicDBObjectBuilder
+				.start("id", id)
+				.append("guest", guest)
+				.append("cMND", cMND)
+				.append("rental", rental)
+				.append("room", room)
+				.append("checkin", checkin)
+				.append("checkout", checkout)
+				.append("totalStayDuration", totalStayDuration)
+				.append("roomPrice", roomPrice)
+				.append("note", note)
+				.append("service", service)
+				.append("servicePayment", servicePayment)
+				.append("additionDetails", additionDetails)
+				.append("additionPayment", additionPayment)
+				.append("totalPayment", totalPayment)
+				.append("status", status)
+				.append("created_by", created_by)
+				.append("created_at", created_at)
+				.append("last_modify_by", last_modify_by)
+				.append("last_modify_at", last_modify_at)
+				.get();
+	}
+	
+	// for Reservation History
+	public DBObject toDBObjectRH() {
 		return BasicDBObjectBuilder
 				.start("id", id)
 				.append("guest", guest)

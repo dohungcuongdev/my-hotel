@@ -44,6 +44,14 @@ public class VNAppController {
 	@Autowired
 	private AdditionalPaymentService additionalPaymentService;
 	
+	// login
+	@RequestMapping(value = "login", method = RequestMethod.GET)
+	public String login(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
+//		if (isAuthenticated(request))
+//			return index(request, response, model);
+		return "login";
+	}
+	
 	// don phong trong ngay 
 	@RequestMapping(value = { "don-phong-hom-nay", "donphonghomnay", "index" }, method = RequestMethod.GET)
 	public String donPhongTrongNgay(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
@@ -279,8 +287,6 @@ public class VNAppController {
 	}
 	// initialize function
 	private void initialize(ModelMap model) {
-		MyHotelConst.user.setName("Cuong");
-		MyHotelConst.user.setImg("1098.jpg");
 		
 		Date today = new Date();
 		model.put("today", DateTimeCalculator.getStrDateVN(today));

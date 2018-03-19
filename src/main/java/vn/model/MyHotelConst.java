@@ -2,6 +2,15 @@ package vn.model;
 
 public class MyHotelConst {
 	public static User user = new User();
+	
+	
+	static {
+		user.setName("Cuong");
+		user.setImg("1098.jpg");
+		user.setRole("receptionist");
+	}
+	
+	
 	public static String additionDetails = "ngay-le";
 	public static int additionPayment1 = 0;
 	public static int additionPayment2 = 0;

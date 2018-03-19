@@ -86,8 +86,12 @@
 <%@ include file="common/footer.jspf"%>
 <script type="text/javascript">
 	function checkReservationForm() {
-		/* 	$('#guest').css("border", "2px solid red");
-		 return false; */
+		let checkin = $('#checkin').val();
+		if(new Date(checkin).getFullYear() !=  new Date().getFullYear()) {
+			$('#checkin').css("border", "2px solid red");
+			$('#checkin').focus();
+			return false;
+		}
 	}
 
 	window.onload = function() { //first load page
