@@ -120,6 +120,16 @@ public class DateTimeCalculator {
 		return formatter.format(new Date()).replace(" ", "T");
 	}
 	
+	public static String getStrDateTimeWithTNoSecond(Date date) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		return formatter.format(date).replace(" ", "T");
+	}
+	
+	public static String getStrDateTimeWithTNoSecond(String datetime) {
+		Date date = formatDateTime(datetime, "dd-MM-yyyy HH:mm:ss");
+		return getStrDateTimeWithTNoSecond(date);
+	}
+	
 	public static String convertSecondsToHMmSs(long milliseconds) {
 		long seconds, minutes, hours;  
 		seconds = milliseconds / 1000;  

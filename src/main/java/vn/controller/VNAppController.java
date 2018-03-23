@@ -118,10 +118,12 @@ public class VNAppController {
 	public String luuXuatHoaDon(@ModelAttribute(value = "reservation") Reservation reservation, HttpServletRequest request, HttpServletResponse response, ModelMap model) {
 		initializeRoomsWithType(model);
 		Reservation checkedout = reservationService.checkOutReservation(reservation);
-		if(checkedout != null)
+		if(checkedout != null) {
 			model.addAttribute("reservation", checkedout);
-		else
-		    model.addAttribute("reservation", reservation);
+			
+			//return authInitializeRedirect(request, response, model, "xuat-hoa-don");
+		} else
+		model.addAttribute("reservation", reservation);
 		return authInitializeRedirect(request, response, model, "tra-phong");
 	}
 	

@@ -36,6 +36,10 @@ public class Reservation extends AbstractModel {
 	private String last_modify_at;  // lần cuối cùng sửa lúc
 	private String listModifyDate;
 	private String listModifyUser;
+	
+	private int genRoomPrice;
+	private int genAdditionPayment;
+	private int genTotalPayment;
 	private boolean unusual; // có bình thường hay ko (không bt là khi tiền thu khác so với hệ thống tính toán)
 	private String billAt; // xuất hóa đơn lúc
 
@@ -219,6 +223,54 @@ public class Reservation extends AbstractModel {
 		this.listModifyUser = listModifyUser;
 	}
 	
+	public int getGenRoomPrice() {
+		return genRoomPrice;
+	}
+
+	public void setGenRoomPrice(int genRoomPrice) {
+		this.genRoomPrice = genRoomPrice;
+	}
+
+	public int getGenAdditionPayment() {
+		return genAdditionPayment;
+	}
+
+	public void setGenAdditionPayment(int genAdditionPayment) {
+		this.genAdditionPayment = genAdditionPayment;
+	}
+
+	public int getGenTotalPayment() {
+		return genTotalPayment;
+	}
+
+	public void setGenTotalPayment(int genTotalPayment) {
+		this.genTotalPayment = genTotalPayment;
+	}
+
+	public boolean isUnusual() {
+		return unusual;
+	}
+
+	public void setUnusual(boolean unusual) {
+		this.unusual = unusual;
+	}
+
+	public String getBillAt() {
+		return billAt;
+	}
+
+	public void setBillAt(String billAt) {
+		this.billAt = billAt;
+	}
+	
+	public String getCheckinStrDate() {
+		return (checkin == null || checkin.equals("")) ? checkin : checkin.replace("T", " ");
+	}
+	
+	public String getCheckoutStrDate() {
+		return (checkout == null || checkout.equals("")) ? checkout : checkout.replace("T", " ");
+	}
+
 	public boolean isHackerAccess() {
 		ReservationDAO reservationDAO = new ReservationDAOImpl();
 		Reservation oldVersionReservation = reservationDAO.getReservationByID(id);
@@ -335,6 +387,11 @@ public class Reservation extends AbstractModel {
 				.append("created_at", created_at)
 				.append("last_modify_by", last_modify_by)
 				.append("last_modify_at", last_modify_at)
+				.append("genRoomPrice", genRoomPrice)
+				.append("genAdditionPayment",genAdditionPayment)
+				.append("genTotalPayment", genTotalPayment)
+				.append("unusual", unusual)
+				.append("billAt", billAt)
 				.get();
 	}
 	
@@ -361,6 +418,11 @@ public class Reservation extends AbstractModel {
 				.append("created_at", created_at)
 				.append("last_modify_by", last_modify_by)
 				.append("last_modify_at", last_modify_at)
+				.append("genRoomPrice", genRoomPrice)
+				.append("genAdditionPayment",genAdditionPayment)
+				.append("genTotalPayment", genTotalPayment)
+				.append("unusual", unusual)
+				.append("billAt", billAt)
 				.get();
 	}
 

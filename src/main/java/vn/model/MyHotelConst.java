@@ -2,6 +2,8 @@ package vn.model;
 
 public class MyHotelConst {
 	public static User user = new User();
+	public static final int startUnit = 1000; // đơn vị x 1000 VNĐ
+	//public static final int startUnit = 1;
 	
 	
 	static {

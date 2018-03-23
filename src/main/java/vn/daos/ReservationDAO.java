@@ -24,7 +24,7 @@ public interface ReservationDAO {
 
 	public void editReservationInfor(Reservation reservation);
 	
-	public Reservation findAnUpdateReservation(Reservation reservation);
+	public Reservation findAndUpdateReservation(Reservation reservation);
 	
 	public Reservation getReservationRoomsBooked(String room);
 		

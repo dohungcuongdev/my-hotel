@@ -16,6 +16,8 @@ import vn.daos.impl.RoomDAOImpl;
 import vn.model.AdditionalPayment;
 import vn.model.HotelRoom;
 import vn.model.HourRentalBill;
+import vn.model.MyHotelConst;
+import vn.model.NightRentalBill;
 import vn.model.Reservation;
 import vn.service.ReservationService;
 
@@ -59,6 +61,39 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public Reservation checkOutReservation(Reservation reservation) {
     	if(reservation.isCorrectCheckoutInfor()) {
+    		reservation.setStatus("Đã Thanh Toán");
+    		reservation.setBillAt(DateTimeCalculator.getStrDateTimeWithTNoSecondToday());
+    		HotelRoom room = roomDAO.getRoomByName(reservation.getRoom());
+    		AdditionalPayment additionalPayment = additionalPaymentDAO.getSelectedAdditionalPayment();
+    		Reservation oldVersionReservation = getReservationByID(reservation.getId());
+    		String dateTimeToday = DateTimeCalculator.getStrDateTimeVNToday();
+    		reservation.setCreated_at(oldVersionReservation.getCreated_at());
+    		reservation.setCreated_by(oldVersionReservation.getCreated_by());
+    		reservation.setLast_modify_at(dateTimeToday);
+    		reservation.setLast_modify_by(MyHotelConst.user.getName());
+    		if (reservation.hasNoValue(reservation.getCheckin())) {
+    			reservation.setCheckin(oldVersionReservation.getCheckin());
+    		}
+    		if (reservation.hasNoValue(reservation.getCheckout())) {
+    			reservation.setCheckout(oldVersionReservation.getCheckout());
+    		}
+    		if(reservation.getRental().equals("Thuê tiếng")) {
+    			HourRentalBill hourRentalBill = new HourRentalBill();
+    			if(room.getType().equals("Thường")) {
+    				hourRentalBill = getHourRentalBill(DateTimeCalculator.getStrDateTimeWithTNoSecond(reservation.getCreated_at()), reservation.getBillAt(), room.getPrice(), room.getHourPrice(), additionalPayment.getAdditionDetails(), additionalPayment.getAdditionalNormalRoomPrice(), additionalPayment.getAdditionalNormalHourPrice(), reservation.getServicePayment());
+    			}
+    			if(room.getType().equals("VIP")) {
+    				hourRentalBill = getHourRentalBill(DateTimeCalculator.getStrDateTimeWithTNoSecond(reservation.getCreated_at()), reservation.getBillAt(), room.getPrice(), room.getHourPrice(), additionalPayment.getAdditionDetails(), additionalPayment.getAdditionalVIPRoomPrice(), additionalPayment.getAdditionalVIPHourPrice(), reservation.getServicePayment());
+    			}
+    			reservation.setGenRoomPrice(hourRentalBill.getTotalRoomPrice());
+    			reservation.setGenAdditionPayment(hourRentalBill.getTotaladditional());
+    			int genTotalPayment = hourRentalBill.getFinalPayment();
+    			reservation.setGenTotalPayment(genTotalPayment);
+    			reservation.setUnusual(genTotalPayment != reservation.getTotalPayment());
+    		}
+    		if(reservation.getRental().equals("Qua Đêm")) {
+    			
+    		}
     		reservationDAO.checkOutReservation(reservation);
     		return reservation;
     	}
@@ -79,7 +114,7 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public Reservation findAnUpdateReservation(Reservation reservation) {
 		//reservation.initSomeInforToUpdate();
-		return reservationDAO.findAnUpdateReservation(reservation);
+		return reservationDAO.findAndUpdateReservation(reservation);
 	}
 
 	@Override
@@ -92,6 +127,31 @@ public class ReservationServiceImpl implements ReservationService {
 		return reservationDAO.getRoomsBookedToday();
 	}
 	
+	@Override
+	public Reservation getReservationByAdditionalPayment(Reservation reservation, AdditionalPayment additionalPayment) {
+		Reservation reservationByAdditionalPayment = new Reservation();
+		if(reservation.getRental().equals("Thuê tiếng")) {
+			HotelRoom room = roomDAO.getRoomByName(reservation.getRoom());
+			String checkout = reservation.getCheckout();
+			if(checkout == null || checkout.equals("") || checkout.equalsIgnoreCase("null"))
+				checkout =  DateTimeCalculator.getStrDateTimeWithTNoSecondToday();
+			HourRentalBill hourRentalBill = getHourRentalBillForRoom(room.getName(), additionalPayment.getAdditionDetails(), reservation.getCheckin(), checkout, room.getPrice(), room.getHourPrice(), reservation.getServicePayment());
+			reservationByAdditionalPayment = getReservationByHourRentalBill(hourRentalBill, reservation);
+		}
+		
+		if(reservation.getRental().equals("Qua Đêm")) {
+			// code here
+			NightRentalBill nightRentalBill = new NightRentalBill(); //code here
+			reservationByAdditionalPayment = getReservationByNightRentalBill(nightRentalBill, reservation);
+		}
+		return reservationByAdditionalPayment;
+	}
+	
+	public Reservation getReservationByNightRentalBill(NightRentalBill nightRentalBill, Reservation reservation) {
+		// code here
+		return reservation;
+	}
+	
 	public Reservation getReservationByHourRentalBill(HourRentalBill hourRentalBill, Reservation reservation) {
 		reservation.setCheckout(hourRentalBill.getCheckout());
 		reservation.setRoomPrice(hourRentalBill.getTotalRoomPrice());
@@ -100,16 +160,6 @@ public class ReservationServiceImpl implements ReservationService {
 		reservation.setAdditionPayment(hourRentalBill.getTotaladditional());
 		reservation.setTotalPayment(hourRentalBill.getFinalPayment());
 		return reservation;
-	}
-	
-	@Override
-	public Reservation getReservationByAdditionalPayment(Reservation reservation, AdditionalPayment additionalPayment) {
-		HotelRoom room = roomDAO.getRoomByName(reservation.getRoom());
-		String checkout = reservation.getCheckout();
-		if(checkout == null || checkout.equals("") || checkout.equalsIgnoreCase("null"))
-			checkout =  DateTimeCalculator.getStrDateTimeWithTNoSecondToday();
-		HourRentalBill hourRentalBill = getHourRentalBillForRoom(room.getName(), additionalPayment.getAdditionDetails(), reservation.getCheckin(), checkout, room.getPrice(), room.getHourPrice(), reservation.getServicePayment());
-		return getReservationByHourRentalBill(hourRentalBill, reservation);
 	}
 	
 	public HourRentalBill getHourRentalBillForReservation(Reservation reservation) {

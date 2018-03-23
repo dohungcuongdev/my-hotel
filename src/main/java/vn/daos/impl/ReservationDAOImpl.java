@@ -130,7 +130,11 @@ public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO 
 
 	@Override
 	public void checkOutReservation(Reservation reservation) {
-		editReservationInfor(reservation);
+		DBObject document = parseJSON(toJson(reservation));
+		DBObject searchObject = new BasicDBObject();
+		searchObject.put("id", reservation.getId());
+		collection.update(searchObject, document);
+		updateReservationHistory(reservation);
 	}
 
 	@Override
@@ -165,7 +169,7 @@ public class ReservationDAOImpl extends JsonParserDAO implements ReservationDAO 
 	}
 
 	@Override
-	public Reservation findAnUpdateReservation(Reservation reservation) {
+	public Reservation findAndUpdateReservation(Reservation reservation) {
 		DBObject document = parseJSON(toJson(reservation));
 		DBObject searchObject = new BasicDBObject();
 		searchObject.put("id", reservation.getId());
