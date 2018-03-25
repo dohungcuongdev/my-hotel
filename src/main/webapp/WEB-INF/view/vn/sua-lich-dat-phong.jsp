@@ -133,7 +133,7 @@ function checkReservationForm(action) {
 
 window.onload = function () { //first load page
 	var isoStr = new Date().addHours(7).toISOString();
-	$('#checkout').val(isoStr.substring(0, isoStr.length - 8));
+	//$('#checkout').val(isoStr.substring(0, isoStr.length - 8));
 	$("#rental").val('${reservation.rental}');
 	$("#room").val('${reservation.room}');
 };
